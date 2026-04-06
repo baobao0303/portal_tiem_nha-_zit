@@ -1,0 +1,89 @@
+<div class="bg-surface font-body text-on-surface subtle-emerald-bg min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+  <header class="fixed top-0 w-full bg-[#f7faf8]/80 backdrop-blur-xl flex justify-center items-center px-8 py-6 z-50">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-[#006B5E]">auto_awesome</span>
+      <h1 class="font-brand text-4xl tracking-normal text-[#006B5E]">Tiệm nhà zịt</h1>
+    </div>
+  </header>
+
+  <main class="w-full max-w-md px-6 py-24 flex-grow flex items-center justify-center z-10">
+    <div class="w-full bg-surface-container-lowest rounded-xl p-10 border border-outline-variant/10 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
+      <div class="mb-10 text-center">
+        <h2 class="font-headline text-3xl font-bold tracking-tight text-on-surface mb-2">Secure Access</h2>
+        <p class="font-body text-sm text-on-surface-variant">Administrative Portal for Curated Oversight</p>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        @if (errorMessage()) {
+          <div class="px-4 py-3 bg-red-50 text-red-700/90 text-sm font-medium rounded-lg border border-red-100 flex items-center gap-2 animate-in fade-in zoom-in duration-200">
+            <span class="material-symbols-outlined text-[20px]">error</span>
+            {{ errorMessage() }}
+          </div>
+        }
+        <div class="space-y-2">
+          <label class="font-label text-xs font-semibold uppercase tracking-widest text-on-surface-variant ml-1" for="email">Administrator Email</label>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+              <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+            </div>
+            <input formControlName="email" class="block w-full pl-11 pr-4 py-4 bg-surface-container-low border-0 rounded-lg text-on-surface focus:ring-2 focus:ring-primary/20 transition-all font-body placeholder:text-outline-variant/60" id="email" name="email" placeholder="admin@curatedemerald.com" required type="email"/>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <label class="font-label text-xs font-semibold uppercase tracking-widest text-on-surface-variant" for="password">Secure Password</label>
+          </div>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+              <span class="material-symbols-outlined text-[20px]">lock_person</span>
+            </div>
+            <input formControlName="password" class="block w-full pl-11 pr-12 py-4 bg-surface-container-low border-0 rounded-lg text-on-surface focus:ring-2 focus:ring-primary/20 transition-all font-body" id="password" name="password" required type="password"/>
+            <button class="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-primary transition-colors cursor-pointer" type="button">
+              <span class="material-symbols-outlined text-[20px]">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center justify-between py-2">
+          <label class="flex items-center cursor-pointer group">
+            <input class="w-4 h-4 rounded-sm border-outline-variant text-primary focus:ring-primary/20 bg-surface-container-low cursor-pointer" type="checkbox"/>
+            <span class="ml-3 font-body text-xs text-on-surface-variant group-hover:text-on-surface transition-colors">Keep me logged in</span>
+          </label>
+          <a class="font-body text-xs text-[#84994F] font-semibold hover:text-[#006b5e] transition-colors underline-offset-4 hover:underline cursor-pointer">
+            Forgot administrative password?
+          </a>
+        </div>
+        <button [disabled]="isLoading()" class="w-full emerald-gradient-btn text-white font-headline font-bold py-4 px-6 rounded-lg shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-wait" type="submit">
+          @if (isLoading()) {
+            <span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
+            <span>Authenticating...</span>
+          } @else {
+            <span>Secure Login</span>
+            <span class="material-symbols-outlined text-[18px]">key</span>
+          }
+        </button>
+      </form>
+      <div class="mt-8 pt-8 border-t border-outline-variant/10 text-center">
+        <p class="font-body text-[11px] text-outline leading-relaxed uppercase tracking-widest">
+            Authorized Personnel Only.<br/> Unauthorized access is strictly monitored and logged.
+        </p>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="absolute bottom-0 w-full flex flex-col md:flex-row justify-between items-center px-6 md:px-12 py-6 z-50">
+    <div class="flex flex-col md:flex-row items-center gap-2 md:gap-6 text-center md:text-left mb-4 md:mb-0">
+      <span class="font-body text-[10px] md:text-xs uppercase tracking-widest text-[#181c1b]/40">© 2024 Tiệm nhà zịt. Secure Administrative Portal.</span>
+    </div>
+    <div class="flex gap-4 md:gap-8">
+      <a class="font-body text-[10px] md:text-xs uppercase tracking-widest text-[#181c1b]/40 hover:text-[#006B5E] transition-all cursor-pointer">Security Policy</a>
+      <a class="font-body text-[10px] md:text-xs uppercase tracking-widest text-[#181c1b]/40 hover:text-[#006B5E] transition-all cursor-pointer">Terms of Service</a>
+      <a class="font-body text-[10px] md:text-xs uppercase tracking-widest text-[#181c1b]/40 hover:text-[#006B5E] transition-all cursor-pointer">Help Center</a>
+    </div>
+  </footer>
+
+  <div class="fixed top-24 right-8 w-64 hidden lg:block opacity-40 pointer-events-none">
+    <div class="aspect-square bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
+  </div>
+  <div class="fixed bottom-24 left-8 w-80 hidden lg:block opacity-30 pointer-events-none">
+    <div class="aspect-square bg-[#FFE797]/10 rounded-full blur-[100px]"></div>
+  </div>
+</div>
