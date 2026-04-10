@@ -1,5 +1,3 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -16,7 +14,52 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022"
+    "module": "ES2022",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "projects/admin-portal/src/app/*"
+      ],
+      "@application/base": [
+        "./projects/application/base/src/public-api.ts"
+      ],
+      "@application/commands": [
+        "./projects/application/commands/src/public-api.ts"
+      ],
+      "@application/helpers": [
+        "./projects/application/helpers/src/public-api.ts"
+      ],
+      "@application/messages": [
+        "./projects/application/messages/src/public-api.ts"
+      ],
+      "@application/queries": [
+        "./projects/application/queries/src/public-api.ts"
+      ],
+      "@core/base": [
+        "./projects/core/base/src/public-api.ts"
+      ],
+      "@core/domain": [
+        "./projects/core/domain/src/public-api.ts"
+      ],
+      "@infrastructure/authorization": [
+        "./projects/infrastructure/authorization/src/public-api.ts"
+      ],
+      "@infrastructure/base": [
+        "./projects/infrastructure/base/src/public-api.ts"
+      ],
+      "@infrastructure/signalr-hub": [
+        "./projects/infrastructure/signalr-hub/src/public-api.ts"
+      ],
+      "@view/base": [
+        "./projects/view/base/src/public-api.ts"
+      ],
+      "@view/features": [
+        "./projects/view/features/src/public-api.ts"
+      ],
+      "@view/widgets": [
+        "./projects/view/widgets/src/public-api.ts"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
