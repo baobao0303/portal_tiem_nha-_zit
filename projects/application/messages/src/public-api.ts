@@ -22,3 +22,4 @@ export * from './lib/view';
 export * from './lib/vrto';
 export * from './lib/weather';
 export * from './lib/task';
+export * from './lib/category';

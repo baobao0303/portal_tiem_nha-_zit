@@ -1,11 +1,12 @@
 import { Component, inject, signal, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { ProductReadableRepository } from '@infrastructure/base';
 import { CreateProductCommandHandler } from '@application/commands';
 import { CreateProductRequest } from '@application/messages';
 import { CurrencyPipe, SlicePipe, UpperCasePipe } from '@angular/common';
 
 import { ZardInputDirective } from '@/shared/components/input';
+import { ZardSelectComponent } from '@/shared/components/select/select.component';
 import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
 import { toast } from 'ngx-sonner';
 
@@ -13,11 +14,13 @@ import { toast } from 'ngx-sonner';
   selector: 'app-products',
   standalone: true,
   imports: [
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
+    FormsModule,
     CurrencyPipe,
     SlicePipe,
     UpperCasePipe,
-    ZardInputDirective
+    ZardInputDirective,
+    ZardSelectComponent
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
@@ -54,6 +57,25 @@ export class ProductsComponent implements OnInit {
     stock_track: new FormControl(true),
     share_facebook: new FormControl(false)
   });
+
+  statusOptions = [
+    { label: 'Active', value: 'active' },
+    { label: 'Draft', value: 'draft' }
+  ];
+
+  categoryOptions = [
+    { label: 'All Collections', value: '' },
+    { label: 'Ceramics', value: 'ceramics' },
+    { label: 'Textiles', value: 'textiles' },
+    { label: 'Furniture', value: 'furniture' }
+  ];
+
+  stockFilterOptions = [
+    { label: 'All Status', value: '' },
+    { label: 'In Stock', value: 'in_stock' },
+    { label: 'Low Stock', value: 'low_stock' },
+    { label: 'Out of Stock', value: 'out_of_stock' }
+  ];
 
   ngOnInit() {
     this.loadProducts();

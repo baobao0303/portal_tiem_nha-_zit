@@ -3,6 +3,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/rou
 import { CanCommandDirective, VIEW_COMMAND_REGISTRY, VIEW_CONTEXT, VIEW_RENDER_REGISTRY, ViewBase, ViewCommandRegistry, ViewRenderRegistry } from '@view/base';
 import { HubContext } from './hub.context';
 import { BROWSER_STORAGE, AuthWriteableRepository } from '@infrastructure/base';
+import { SidebarComponent } from '@/layout/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-hub',
@@ -11,6 +12,7 @@ import { BROWSER_STORAGE, AuthWriteableRepository } from '@infrastructure/base';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
+    SidebarComponent
   ],
   hostDirectives: [CanCommandDirective],
   providers: [

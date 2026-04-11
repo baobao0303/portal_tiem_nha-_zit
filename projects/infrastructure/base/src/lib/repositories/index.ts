@@ -27,6 +27,7 @@ export * from './view.readable.repository';
 export * from './view.writeable.repository';
 export * from './vrto.readable.repository';
 export * from './weather.readable.repository';
+export * from './category.readable.repository';
 export * from './contact.readable.repository';
 export * from './contact.writeable.repository';
 export * from './invitation.readable.repository';

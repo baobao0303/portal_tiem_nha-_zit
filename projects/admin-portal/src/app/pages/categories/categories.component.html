@@ -1,0 +1,184 @@
+<div class="space-y-8">
+  <!-- Header Section -->
+  <div class="flex flex-col gap-1">
+    <h2 class="text-3xl font-headline font-extrabold tracking-tight text-on-surface">Category Management</h2>
+    <p class="text-on-surface-variant font-body">Organize and curate your digital atelier’s product collections.</p>
+  </div>
+  
+  <!-- Bento Stats -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="bg-surface-container-lowest p-6 rounded-xl border-none shadow-sm hover:shadow-md transition-shadow">
+      <div class="flex items-center justify-between mb-4">
+        <span class="material-symbols-outlined text-primary p-2 bg-primary-fixed-dim/20 rounded-lg" data-icon="category">category</span>
+        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">+4 this month</span>
+      </div>
+      <p class="text-sm text-on-surface-variant font-medium">Total Categories</p>
+      <p class="text-2xl font-headline font-bold text-on-surface">24</p>
+    </div>
+    
+    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
+      <div class="flex items-center justify-between mb-4">
+        <span class="material-symbols-outlined text-secondary p-2 bg-secondary-fixed/30 rounded-lg" data-icon="collections">collections</span>
+      </div>
+      <p class="text-sm text-on-surface-variant font-medium">Active Collections</p>
+      <p class="text-2xl font-headline font-bold text-on-surface">18</p>
+    </div>
+    
+    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
+      <div class="flex items-center justify-between mb-4">
+        <span class="material-symbols-outlined text-tertiary p-2 bg-tertiary-fixed/30 rounded-lg" data-icon="inventory_2">inventory_2</span>
+      </div>
+      <p class="text-sm text-on-surface-variant font-medium">Avg. Products/Cat</p>
+      <p class="text-2xl font-headline font-bold text-on-surface">42</p>
+    </div>
+    
+    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
+      <div class="flex items-center justify-between mb-4">
+        <span class="material-symbols-outlined text-emerald-700 p-2 bg-emerald-100 rounded-lg" data-icon="visibility">visibility</span>
+      </div>
+      <p class="text-sm text-on-surface-variant font-medium">Top Category View</p>
+      <p class="text-2xl font-headline font-bold text-on-surface">Ceramics</p>
+    </div>
+  </div>
+  
+  <!-- Main Split Layout -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+    <!-- Category Table (2/3) -->
+    <div class="lg:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+      <div class="p-6 border-b border-surface-variant flex items-center justify-between">
+        <h3 class="font-headline font-bold text-lg">Existing Categories</h3>
+        <div class="flex gap-2">
+          <button class="p-2 hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+          </button>
+          <button class="p-2 hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-sm" data-icon="sort">sort</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="bg-surface-container-low/50">
+              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Category</th>
+              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Slug/SKU</th>
+              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Status</th>
+              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Products</th>
+              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-surface-container-low">
+            <!-- Row 1 -->
+            <tr class="hover:bg-surface-container-low/30 transition-colors">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9bVvhosLQuqPRZna39WX5ZD2g65U3JrrbdW7SSrUMUYVlEh60fFTYeWrdUHtx4NYI0RTDiypSHqCCGhFY3MlXYSCFUqP-iLNjIC1Pa7SbQPVz7o8Veku4-48MnlTCAJtUQsc2ab-4Q9TBtwza0aDvsC09Fv_McZzmFStWKZIV2PBzvvfmFbPC9gmXE7ES4D7FiKpmDoftNWs7OU1uWLZkQ5PNx1zqQKFrHK4DIF194EXr6Vuav813tcxDU1bRnxXb4cgyjYQ9WXV8"/>
+                  </div>
+                  <div>
+                    <div class="font-bold text-on-surface text-sm">Ceramic Art</div>
+                    <div class="text-xs text-on-surface-variant">Interior Decor</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-sm font-medium text-on-surface-variant">CERM-01</td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-bold bg-primary-fixed/20 text-primary">
+                  <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>Active
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm font-semibold text-on-surface">128</td>
+              <td class="px-6 py-4 text-right space-x-2">
+                <button class="text-slate-400 hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                <button class="text-slate-400 hover:text-error transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+              </td>
+            </tr>
+            <!-- Row 2 -->
+            <tr class="hover:bg-surface-container-low/30 transition-colors">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1UlZ5qjsXxSJiT96_3PQOI1MSctQqCUUIiozCcca6Ax0L4P_YgRvQiXs8onWim9ng1BldvknVqnncXDQM7nfLIo5q8ZAxTTy6rf__32E5owECIUlqpelp-UwS1Nz9bnsJUKmJ7UPs80C8yHJ6gpz8Da8nwwYGjKTgPhCHza9UG9uo4kFUrLOhuu9S_vZVkiynB8BDmX6VLiYpSJQ0oh8ZW5cA1jBwWLRo5nyZiRPiuqC8g9pHgjzxQF9AMniV3VJUhK6XW62Hrron"/>
+                  </div>
+                  <div>
+                    <div class="font-bold text-on-surface text-sm">Fine Fragrance</div>
+                    <div class="text-xs text-on-surface-variant">Home Scenting</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-sm font-medium text-on-surface-variant">FRAG-04</td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-bold bg-primary-fixed/20 text-primary">
+                  <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>Active
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm font-semibold text-on-surface">56</td>
+              <td class="px-6 py-4 text-right space-x-2">
+                <button class="text-slate-400 hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                <button class="text-slate-400 hover:text-error transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+              </td>
+            </tr>
+            <!-- Row 3 -->
+            <tr class="hover:bg-surface-container-low/30 transition-colors">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoCilNa5lLu31k50FKltl3wMQutSNaGrRg9-MOpFV0Lc0Zv3H3ZAXIBgi_W_lPas6e6IA87X0u5izKjYy_M5hTwSPvRa1XTf-GkpbLiVuxwbiHEgvACarpQUpz7w6Z1zIuiFD-TOh9efMW2AGh_T4H8kYzbg441xgYq3AAlV8jRqaHDwhBlYUOvVTyB2fukd6EK14Ef5kgx97WYPpcMDP-R0uqEvpbj2hDokWU2lfIzarbSqojH2Nelah_43DNdWFbsVHICQV1LNek"/>
+                  </div>
+                  <div>
+                    <div class="font-bold text-on-surface text-sm">Artisan Wood</div>
+                    <div class="text-xs text-on-surface-variant">Bespoke Furniture</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-sm font-medium text-on-surface-variant">WOOD-02</td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-bold bg-surface-container-highest text-on-surface-variant">
+                  <span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>Inactive
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm font-semibold text-on-surface">14</td>
+              <td class="px-6 py-4 text-right space-x-2">
+                <button class="text-slate-400 hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                <button class="text-slate-400 hover:text-error transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Add New Category Form (1/3) -->
+    <div class="lg:col-span-1 bg-surface-container-low p-8 rounded-xl space-y-6">
+      <h3 class="font-headline font-bold text-lg text-emerald-900">Add New Category</h3>
+      <form class="space-y-5">
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider font-label">Category Name</label>
+          <input class="w-full bg-surface-container-highest border-none rounded-lg py-3 px-4 focus:ring-0 focus:border-2 focus:border-primary text-sm font-body outline-none" placeholder="e.g. Handmade Textiles" type="text"/>
+        </div>
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider font-label">Category Image</label>
+          <div class="w-full h-40 border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center bg-surface hover:bg-surface-container-lowest transition-colors group cursor-pointer">
+            <span class="material-symbols-outlined text-[32px] text-slate-300 group-hover:text-primary transition-colors mb-2">upload_file</span>
+            <p class="text-xs text-on-surface-variant font-medium">Click to upload image</p>
+            <p class="text-[10px] text-slate-400 mt-1">Recommended size: 800x800px</p>
+          </div>
+        </div>
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider font-label">Description</label>
+          <textarea class="w-full bg-surface-container-highest border-none rounded-lg py-3 px-4 focus:ring-0 focus:border-2 focus:border-primary text-sm font-body outline-none resize-none" placeholder="Describe the essence of this collection..." rows="4"></textarea>
+        </div>
+        
+        <div class="flex items-center gap-3 pt-4">
+          <button class="flex-1 bg-gradient-to-br from-primary to-primary-container text-on-primary py-3 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all cursor-pointer box-shadow-sm" type="submit">
+            Create Collection
+          </button>
+          <button class="px-5 py-3 text-on-surface-variant hover:text-on-surface font-headline font-bold text-sm transition-colors cursor-pointer" type="button">
+            Clear
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

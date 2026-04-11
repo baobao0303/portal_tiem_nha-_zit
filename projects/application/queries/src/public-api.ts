@@ -20,3 +20,4 @@ export * from './lib/vrto';
 export * from './lib/weather/get-all.query.handler';
 export * from './lib/task';
 export * from './lib/genders';
+export * from './lib/category';

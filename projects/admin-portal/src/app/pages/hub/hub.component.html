@@ -5,54 +5,12 @@
     <div class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden backdrop-blur-sm transition-opacity" (click)="isMobileMenuOpen.set(false)"></div>
   }
 
-  <aside [class]="'w-64 fixed left-0 top-0 flex flex-col h-full border-r border-emerald-100/20 bg-emerald-50 dark:bg-slate-950 z-50 transition-transform duration-300 ease-in-out lg:translate-x-0 ' + (isMobileMenuOpen() ? 'translate-x-0' : '-translate-x-full')">
-    <div class="p-8 pb-4 lg:pb-8 flex justify-between items-center">
-      <div>
-        <h1 class="text-3xl text-emerald-900 dark:text-emerald-100 font-brand tracking-tight">Tiệm nhà zịt</h1>
-        <p class="text-xs text-emerald-700/70 font-medium mt-1">Admin Management</p>
-      </div>
-      <button (click)="isMobileMenuOpen.set(false)" class="lg:hidden p-2 text-emerald-800 hover:bg-emerald-100 rounded-lg">
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-    
-    <nav class="flex-1 px-4 space-y-2 overflow-y-auto">
-      <a routerLink="/dashboard" (click)="isMobileMenuOpen.set(false)" routerLinkActive="border-r-4 border-emerald-700 bg-emerald-100 dark:bg-slate-800 text-emerald-900 dark:text-emerald-50 font-bold" [routerLinkActiveOptions]="{exact: true}" class="flex items-center px-4 py-3 gap-3 text-emerald-700/70 dark:text-slate-400 font-medium hover:bg-emerald-100 dark:hover:bg-slate-800 transition-colors duration-200 cursor-pointer">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="font-headline tracking-tight">Dashboard</span>
-      </a>
-      <a routerLink="/products" (click)="isMobileMenuOpen.set(false)" routerLinkActive="border-r-4 border-emerald-700 bg-emerald-100 dark:bg-slate-800 text-emerald-900 dark:text-emerald-50 font-bold" class="flex items-center px-4 py-3 gap-3 text-emerald-700/70 dark:text-slate-400 font-medium hover:bg-emerald-100 dark:hover:bg-slate-800 transition-colors duration-200 cursor-pointer">
-        <span class="material-symbols-outlined">inventory_2</span>
-        <span class="font-headline tracking-tight">Products</span>
-      </a>
-      <a routerLink="/orders" (click)="isMobileMenuOpen.set(false)" routerLinkActive="border-r-4 border-emerald-700 bg-emerald-100 dark:bg-slate-800 text-emerald-900 dark:text-emerald-50 font-bold" class="flex items-center px-4 py-3 gap-3 text-emerald-700/70 dark:text-slate-400 font-medium hover:bg-emerald-100 dark:hover:bg-slate-800 transition-colors duration-200 cursor-pointer">
-        <span class="material-symbols-outlined">shopping_cart</span>
-        <span class="font-headline tracking-tight">Orders</span>
-      </a>
-      <a class="flex items-center px-4 py-3 gap-3 text-emerald-700/70 dark:text-slate-400 font-medium hover:bg-emerald-100 dark:hover:bg-slate-800 transition-colors duration-200 cursor-pointer">
-        <span class="material-symbols-outlined">shelves</span>
-        <span class="font-headline tracking-tight">Inventory</span>
-      </a>
-      <a class="flex items-center px-4 py-3 gap-3 text-emerald-700/70 dark:text-slate-400 font-medium hover:bg-emerald-100 dark:hover:bg-slate-800 transition-colors duration-200 cursor-pointer">
-        <span class="material-symbols-outlined">settings</span>
-        <span class="font-headline tracking-tight">Settings</span>
-      </a>
-    </nav>
-    <div class="p-6 border-t border-emerald-100/10 shrink-0">
-      <div class="flex items-center justify-between group">
-        <div class="flex items-center gap-3">
-          <img alt="Admin Profile Avatar" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiR1oVPQ1FJIgH3HeQgbds_neYgBVAIwxOx6IhgrNwYEUiXu-9anukeLVOT-LCnG-ttbVhy9pwZvj_7Wlj4B-MrvGT4638LG24_lbBlxtl9YYJWWmfL09hkxk9rXWgdw5_oDCS5x79924FYDzrDrsPeTlClLWL41x9deml_oSAQNfD7fCu94b6MST0av_oF5sAIq_iGJx3CDUrZPXZZKGoRNHYBd6b4xpMHC1h0y9YyMZxDWoV8E1yaavIpLVVrqo-YCvDTlRX2Doo"/>
-          <div>
-            <p class="text-sm font-bold text-emerald-900 truncate max-w-[120px]">{{ adminProfile()?.fullName || 'Admin User' }}</p>
-            <p class="text-xs text-emerald-700/50 capitalize">{{ adminProfile()?.role || 'Administrator' }}</p>
-          </div>
-        </div>
-        <button (click)="logout()" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Logout">
-          <span class="material-symbols-outlined text-[20px]">logout</span>
-        </button>
-      </div>
-    </div>
-  </aside>
+  <app-sidebar 
+    [isMobileMenuOpen]="isMobileMenuOpen()" 
+    [adminProfile]="adminProfile()" 
+    (logoutAction)="logout()" 
+    (closeMobileMenu)="isMobileMenuOpen.set(false)">
+  </app-sidebar>
 
   <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-16rem)] h-16 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex justify-between items-center px-4 md:px-8 shadow-sm dark:shadow-none transition-all duration-300">
     <div class="flex items-center flex-1 gap-2 md:gap-4">
