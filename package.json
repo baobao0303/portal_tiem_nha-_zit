@@ -16,9 +16,8 @@
     "build:lib:application:queries": "ng build @application/queries",
     "build:lib:infrastructure:authorization": "ng build @infrastructure/authorization",
     "build:lib:infrastructure:base": "ng build @infrastructure/base",
-    "build:lib:infrastructure:signalr-hub": "ng build @infrastructure/signalr-hub",
     "build:lib:view:base": "ng build @view/base",
-    "build:lib:all": "ng build @core/base && ng build @application/base && ng build @application/messages && ng build @core/domain && ng build @application/helpers && ng build @application/commands && ng build @application/queries && ng build @infrastructure/base && ng build @infrastructure/authorization && ng build @infrastructure/signalr-hub && ng build @view/base"
+    "build:lib:all": "ng build @core/base && ng build @application/base && ng build @application/messages && ng build @core/domain && ng build @application/helpers && ng build @infrastructure/base && ng build @application/commands && ng build @application/queries && ng build @infrastructure/authorization && ng build @view/base"
   },
   "private": true,
   "dependencies": {

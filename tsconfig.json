@@ -21,42 +21,51 @@
         "projects/admin-portal/src/app/*"
       ],
       "@application/base": [
+        "dist/application/base",
         "./projects/application/base/src/public-api.ts"
       ],
       "@application/commands": [
+        "dist/application/commands",
         "./projects/application/commands/src/public-api.ts"
       ],
       "@application/helpers": [
+        "dist/application/helpers",
         "./projects/application/helpers/src/public-api.ts"
       ],
       "@application/messages": [
+        "dist/application/messages",
         "./projects/application/messages/src/public-api.ts"
       ],
       "@application/queries": [
+        "dist/application/queries",
         "./projects/application/queries/src/public-api.ts"
       ],
       "@core/base": [
+        "dist/core/base",
         "./projects/core/base/src/public-api.ts"
       ],
       "@core/domain": [
+        "dist/core/domain",
         "./projects/core/domain/src/public-api.ts"
       ],
       "@infrastructure/authorization": [
+        "dist/infrastructure/authorization",
         "./projects/infrastructure/authorization/src/public-api.ts"
       ],
       "@infrastructure/base": [
+        "dist/infrastructure/base",
         "./projects/infrastructure/base/src/public-api.ts"
       ],
-      "@infrastructure/signalr-hub": [
-        "./projects/infrastructure/signalr-hub/src/public-api.ts"
-      ],
       "@view/base": [
+        "dist/view/base",
         "./projects/view/base/src/public-api.ts"
       ],
       "@view/features": [
+        "dist/view/features",
         "./projects/view/features/src/public-api.ts"
       ],
       "@view/widgets": [
+        "dist/view/widgets",
         "./projects/view/widgets/src/public-api.ts"
       ]
     }
