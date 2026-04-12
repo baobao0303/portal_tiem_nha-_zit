@@ -1,17 +1,17 @@
 import { propertyMapper } from '@core/base';
-import { ViewAllowBO } from '../view';
+
 
 export class RoleViewBO {
   @propertyMapper('id', String)
   public id: string = '';
 
-  @propertyMapper('action', ViewAllowBO)
-  public action?: ViewAllowBO;
+  @propertyMapper('action', Object)
+  public action?: any;
 
   @propertyMapper('title', String)
   public title?: string = '';
 
-  constructor(id: string = '', action?: ViewAllowBO) {
+  constructor(id: string = '', action?: any) {
     this.id = id;
     this.action = action;
   }

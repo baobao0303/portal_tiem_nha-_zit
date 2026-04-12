@@ -1,8 +1,7 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { VRTORequest, VRTOResponse } from '@application/messages';
-import { VRTOQueryHandler } from '@application/queries';
+
 import { BROWSER_STORAGE } from '@infrastructure/base';
 import { BehaviorSubject, catchError, filter, finalize, Observable, switchMap, take, throwError } from 'rxjs';
 import { AuthorizationConstant } from '../authorization.constant';
@@ -12,7 +11,7 @@ import { AuthorizationConstant } from '../authorization.constant';
 })
 export class AuthorizationTokenInterceptor implements HttpInterceptor {
   private readonly _storage = inject(BROWSER_STORAGE);
-  private readonly _vrtoQueryHandler = inject(VRTOQueryHandler);
+
   private readonly _router = inject(Router);
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
@@ -74,37 +73,7 @@ export class AuthorizationTokenInterceptor implements HttpInterceptor {
    * @returns {Observable<HttpEvent<any>>} An observable that emits the HTTP event.
    */
   private _handleUnauthorized(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      this.refreshTokenSubject.next(null);
-
-      const vrto = this._storage.get(AuthorizationConstant.vrto);
-      if (!vrto) {
-        return this._redirectToSignIn();
-      }
-
-      const request = new VRTORequest();
-      request.vrto = vrto;
-      return this._vrtoQueryHandler.handle(request).pipe(
-        switchMap((response) => {
-          if (response instanceof VRTOResponse && response.vato) {
-            const vato = response.vato;
-            this._storage.set(AuthorizationConstant.vato, vato);
-            this.refreshTokenSubject.next(vato);
-            return next.handle(this._addTokenHeader(req, vato));
-          }
-          return this._redirectToSignIn();
-        }),
-        catchError(() => this._redirectToSignIn()),
-        finalize(() => (this.isRefreshing = false)),
-      );
-    }
-
-    return this.refreshTokenSubject.pipe(
-      filter((token) => token !== null),
-      take(1),
-      switchMap((token) => next.handle(this._addTokenHeader(req, token!))),
-    );
+    return this._redirectToSignIn();
   }
 
   /**
