@@ -2,8 +2,6 @@
  * Public API Surface of base
  */
 
-export * from './lib/abstract-file.message';
-export * from './lib/abstract.message';
 export * from './lib/commands';
 export * from './lib/contexts';
 export * from './lib/directives';

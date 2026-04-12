@@ -3,11 +3,11 @@ import { Context } from './context';
 import { BrowserStorageBase, LocalStorage } from './storages';
 
 /**
- * Defines the XFW Context which keep end point (location) to connect to backend service
+ * Defines the Portal Context which keep end point (location) to connect to backend service
  * The endpoint should be get from Environment
  */
 @Injectable({ providedIn: 'root' })
-export class XFWContext implements Context {
+export class PortalContext implements Context {
   private _endPoint: string = '';
 
   /**

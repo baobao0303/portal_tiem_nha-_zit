@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { DestroyRef, inject } from '@angular/core';
 import { IReadableRepository } from '@core/base';
 import { Observable } from 'rxjs';
-import { XFWContext } from './xfw.context';
+import { PortalContext } from './portal.context';
 
 export class ReadableRepository implements IReadableRepository {
-  protected _context = inject(XFWContext);
+  protected _context = inject(PortalContext);
   protected httpClient = inject(HttpClient);
   protected destroyRef = inject(DestroyRef);
 
