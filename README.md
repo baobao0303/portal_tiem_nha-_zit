@@ -1,6 +1,6 @@
-# The Curated Emerald - Enterprise Admin Portal (Back Office)
+# Tiệm nhà zịt - Enterprise Admin Portal (Back Office)
 
-Welcome to the cutting-edge administrative nerve center for **The Curated Emerald**. This project demonstrates an enterprise-grade back-office architecture built entirely on **Angular 18+**, **TypeScript**, and **RxJS**, designed specifically for high scalability, maintainability, and top-tier performance.
+Welcome to the cutting-edge administrative nerve center for **Tiệm nhà zịt**. This is a personal e-commerce project currently in active development. This project demonstrates an enterprise-grade back-office architecture built entirely on **Angular 18+**, **TypeScript**, and **RxJS**, designed specifically for high scalability, maintainability, and top-tier performance.
 
 This system is engineered utilizing strict **Clean Architecture**, **Domain-Driven Design (DDD)**, and the **CQRS (Command Query Responsibility Segregation)** pattern within a highly modularized monorepo workspace.
 
@@ -67,7 +67,7 @@ This project is built to align with elite standards for Large-scale Front-end En
 - **Advanced Angular Mastery**: Extensive use of **TypeScript**, **RxJS** for reactive data streams, deep understanding of the Angular lifecycle, and hierarchical **Dependency Injection (DI)**.
 - **Performance Optimization**: Explicitly optimized for speed using **Lazy Loading**, precise **Change Detection** strategies (`OnPush`, Angular Signals), and aggressive **bundle size optimization**.
 - **REST APIs & Auth Integration**: Deep integration with backend RESTful APIs, securing routes and data flow using **JWT / OAuth2** token mechanisms via HTTP Interceptors.
-- **Reusable Shared UI System**: Creation of a scalable, maintainable "Curated Emerald" Design System (Core UI) combining **SCSS/CSS**, responsive design principles, and standalone components.
+- **Reusable Shared UI System**: Creation of a scalable, maintainable "Tiệm nhà zịt" Design System (Core UI) combining **SCSS/CSS**, responsive design principles, and standalone components.
 - **CQRS Pattern Built-in**: Complete segregation of Reads (`Queries`) from Writes (`Commands`), ensuring decoupled and highly cohesive state flows.
 
 ---
