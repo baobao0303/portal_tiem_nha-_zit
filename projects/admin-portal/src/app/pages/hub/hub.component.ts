@@ -5,6 +5,7 @@ import { CanCommandDirective, VIEW_COMMAND_REGISTRY, VIEW_CONTEXT, VIEW_RENDER_R
 import { HubContext } from './hub.context';
 import { BROWSER_STORAGE, AuthWriteableRepository } from '@infrastructure/base';
 import { SidebarComponent } from '@/layout/sidebar/sidebar.component';
+import { HeaderComponent } from '@/layout/header/header.component';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
@@ -14,6 +15,7 @@ import { LucideAngularModule } from 'lucide-angular';
     CommonModule,
     RouterOutlet,
     SidebarComponent,
+    HeaderComponent,
     LucideAngularModule
   ],
   hostDirectives: [CanCommandDirective],
@@ -27,7 +29,6 @@ import { LucideAngularModule } from 'lucide-angular';
 export class HubComponent extends ViewBase implements ViewCommandRegistry, ViewRenderRegistry, OnInit {
   isCollapsed = signal(false);
   isMobileMenuOpen = signal(false);
-  isProfileMenuOpen = signal(false);
 
   private _browserStorage = inject(BROWSER_STORAGE);
   private authRepo = inject(AuthWriteableRepository);
@@ -44,6 +45,17 @@ export class HubComponent extends ViewBase implements ViewCommandRegistry, ViewR
         console.error('Failed to parse ADMIN_SESSION', e);
       }
     }
+
+    const collapsedStr = this._browserStorage.get('SIDEBAR_COLLAPSED');
+    if (collapsedStr) {
+      this.isCollapsed.set(collapsedStr === 'true');
+    }
+  }
+
+  toggleSidebar() {
+    const newState = !this.isCollapsed();
+    this.isCollapsed.set(newState);
+    this._browserStorage.set('SIDEBAR_COLLAPSED', String(newState));
   }
 
   logout() {

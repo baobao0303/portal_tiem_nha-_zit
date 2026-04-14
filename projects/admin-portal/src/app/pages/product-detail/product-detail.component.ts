@@ -7,11 +7,12 @@ import { firstValueFrom } from 'rxjs';
 import { toast } from 'ngx-sonner';
 import { ZardSelectComponent } from '@/shared/components/select/select.component';
 import { QuillModule } from 'ngx-quill';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, ZardSelectComponent, QuillModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, ZardSelectComponent, QuillModule, NgApexchartsModule],
   templateUrl: './product-detail.component.html'
 })
 export class ProductDetailComponent implements OnInit {
@@ -21,6 +22,7 @@ export class ProductDetailComponent implements OnInit {
   private _route = inject(ActivatedRoute);
 
   public isEditMode = signal(false);
+  public isLoading = signal(false);
   public isUploading = signal(false);
   public isSubmitting = signal(false);
   
@@ -50,6 +52,20 @@ export class ProductDetailComponent implements OnInit {
   public productId = signal<string | null>(null);
 
   public selectedIndex = signal(0);
+
+  public performanceChartOptions: any = {
+    series: [{ name: 'Doanh thu', data: [12000, 15000, 14000, 18000, 22000, 26000, 30000] }],
+    chart: { type: 'area', height: 60, sparkline: { enabled: true } },
+    stroke: { curve: 'smooth', width: 3 },
+    fill: { opacity: 0.15, type: 'solid' },
+    colors: ['#0f172a'],
+    tooltip: {
+      fixed: { enabled: false },
+      x: { show: false },
+      y: { title: { formatter: function () { return ''; } } },
+      marker: { show: false }
+    }
+  };
 
   // Computed properties for UI binding
   public mainMedia = computed(() => {
@@ -100,13 +116,17 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit() {
     this.loadCategories();
-    this._route.params.subscribe(params => {
+    this._route.params.subscribe(async params => {
       if (params['id'] && params['id'] !== 'new') {
         this.isEditMode.set(true);
         this.productId.set(params['id']);
-        this.loadProduct(params['id']);
-        this.loadStats(params['id']);
-        this.loadLogs(params['id']);
+        this.isLoading.set(true);
+        await Promise.all([
+          this.loadProduct(params['id']),
+          this.loadStats(params['id']),
+          this.loadLogs(params['id'])
+        ]);
+        this.isLoading.set(false);
       }
     });
 

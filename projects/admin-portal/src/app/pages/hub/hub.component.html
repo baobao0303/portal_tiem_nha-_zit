@@ -21,9 +21,9 @@
     class="relative z-50 h-screen"
     [isMobileMenuOpen]="isMobileMenuOpen()" 
     [isCollapsed]="isCollapsed()"
-    [adminProfile]="adminProfile()" 
-    (toggleCollapse)="isCollapsed.set(!isCollapsed())"
-    (logoutAction)="logout()" 
+    [adminProfile]="adminProfile()"
+    (logoutAction)="logout()"
+    (toggleCollapse)="toggleSidebar()"
     (closeMobileMenu)="isMobileMenuOpen.set(false)">
   </app-sidebar>
 
@@ -31,72 +31,9 @@
     [ngClass]="isCollapsed() ? 'lg:ml-20' : 'lg:ml-64'">
     
     <!-- Top Glass Header -->
-    <header class="h-20 w-full z-30 bg-white flex justify-between items-center px-6 md:px-10 border-b border-border shrink-0 sticky top-0 transition-all duration-500 shadow-sm">
-      <div class="flex items-center flex-1 gap-4 md:gap-6">
-        <button (click)="isMobileMenuOpen.set(true)" 
-          class="lg:hidden p-2.5 text-muted-foreground hover:text-accent rounded-2xl hover:bg-secondary/40 transition-all cursor-pointer">
-          <lucide-icon name="menu" class="h-5 w-5"></lucide-icon>
-        </button>
-        
-        <div class="relative w-full max-w-sm lg:w-[26.25rem] group">
-          <lucide-icon name="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 h-4 w-4 transition-colors group-focus-within:text-accent"></lucide-icon>
-          <input 
-            class="w-full bg-white border border-border rounded-2xl pl-12 pr-6 py-3 text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent/40 placeholder:text-muted-foreground/50 transition-all font-body text-foreground outline-none shadow-sm" 
-            placeholder="Search resources, orders, or products..." 
-            type="text"/>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3 md:gap-8 shrink-0">
-        <div class="hidden md:flex items-center gap-2">
-          <button class="relative p-2.5 text-muted-foreground hover:text-accent hover:bg-secondary/40 rounded-xl transition-all duration-200 cursor-pointer">
-            <lucide-icon name="bell" class="h-4.5 w-4.5"></lucide-icon>
-            <span class="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full border-2 border-background animate-pulse"></span>
-          </button>
-          <button class="text-muted-foreground hover:text-accent hover:bg-secondary/40 rounded-xl p-2.5 transition-all duration-200 cursor-pointer">
-            <lucide-icon name="help-circle" class="h-4.5 w-4.5"></lucide-icon>
-          </button>
-        </div>
-        
-        <div class="h-8 w-px bg-white/10 hidden md:block"></div>
-        
-        <!-- Profile Dropdown -->
-        <div class="relative">
-          <div (click)="isProfileMenuOpen.set(!isProfileMenuOpen())" 
-            class="flex items-center gap-3 p-1.5 pr-4 bg-white hover:bg-gray-50 border border-border rounded-2xl cursor-pointer transition-all group shadow-sm">
-            <img alt="Administrator Profile" 
-              class="w-8 h-8 rounded-xl border border-border object-cover shadow-sm group-hover:scale-105 transition-transform" 
-              [src]="adminProfile()?.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBhqyhVrrn9cyToK7NfYnp2pIvRvDk1riX3lMNEDDAgJSWQ7wWmapB6pHc_jJHY1U60_slZz0OTErOVwRt6xTiGlNi4dghfKXFbX39DO_CkTsoigikPeDj6ltSFgPr9pnvsI7TLqKUc-mVbN47wWKYqXtsdJ-qB0_CCXzpR6dhih2BmctAqDm3RcwdBuJh9Rk9E3DzLPTb8TD6HyWkne9soRamtLlTNBG_A58YWtLSwqVqWhwdyiVnxtE8jCYur2aJKSkOVTNtfJTL3'"/>
-            <lucide-icon name="chevron-down" class="h-3.5 w-3.5 text-muted-foreground transition-transform" [class.rotate-180]="isProfileMenuOpen()"></lucide-icon>
-          </div>
-          
-          @if (isProfileMenuOpen()) {
-            <div class="absolute right-0 mt-4 w-60 bg-white border border-primary/10 rounded-[1.5rem] p-2 z-50 animate-in fade-in zoom-in-95 duration-300 shadow-2xl">
-              <div class="px-4 py-4 mb-1">
-                <p class="text-[0.8125rem] font-bold text-foreground truncate">{{ adminProfile()?.fullName || 'Administrator' }}</p>
-                <p class="text-[0.625rem] text-muted-foreground uppercase tracking-widest truncate mt-1 font-medium opacity-60">{{ adminProfile()?.role || 'System Manager' }}</p>
-              </div>
-              
-              <div class="h-px bg-white/5 mx-2 mb-1"></div>
-              
-              <button class="w-full text-left px-4 py-2.5 text-xs font-bold text-muted-foreground hover:bg-accent/10 hover:text-accent rounded-xl flex items-center gap-3 transition-all cursor-pointer">
-                <lucide-icon name="user-circle" class="h-4 w-4"></lucide-icon>
-                Account Settings
-              </button>
-              
-              <button (click)="logout()" class="w-full text-left px-4 py-2.5 text-xs font-bold text-rose-500 hover:bg-rose-500/10 rounded-xl flex items-center gap-3 transition-all cursor-pointer">
-                <lucide-icon name="log-out" class="h-4 w-4"></lucide-icon>
-                Secure Sign Out
-              </button>
-            </div>
-          }
-          <!-- Backdrop for dropdown -->
-          @if (isProfileMenuOpen()) {
-            <div class="fixed inset-0 z-40" (click)="isProfileMenuOpen.set(false)"></div>
-          }
-        </div>
-      </div>
-    </header>
+    <app-header
+      (toggleMobileMenu)="isMobileMenuOpen.set(true)">
+    </app-header>
 
     <!-- Main Content Stage -->
     <main class="flex-1 overflow-y-auto p-6 md:p-10 scrollbar-hide">

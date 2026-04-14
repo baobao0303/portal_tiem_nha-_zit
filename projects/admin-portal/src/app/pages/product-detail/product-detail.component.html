@@ -8,7 +8,12 @@
     <span class="text-primary font-bold">Chi Tiết Sản Phẩm</span>
   </nav>
 
-  @if (isEditMode()) {
+  @if (isLoading()) {
+    <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+      <div class="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin shadow-sm"></div>
+      <p class="text-on-surface-variant font-label text-xs uppercase tracking-[0.2em] font-bold animate-pulse">Đang tải dữ liệu...</p>
+    </div>
+  } @else if (isEditMode()) {
     <!-- Premium Edit Mode UI -->
     <div class="grid grid-cols-12 gap-8" [formGroup]="productForm">
       
@@ -211,16 +216,28 @@
             Chỉ Số Hiệu Suất
           </h3>
           <div class="grid grid-cols-2 gap-4">
-            <div class="bg-white p-6 rounded-2xl col-span-2 flex items-center justify-between shadow-sm border border-border">
-              <div>
-                <p class="text-[0.625rem] uppercase font-bold text-outline font-label mb-1">Tổng Hiệu Suất Kinh Doanh</p>
-                <div class="flex items-baseline gap-2">
-                  <p class="text-3xl font-headline font-extrabold text-primary">${{ stats()?.totalRevenue | number:'1.0-0' }}</p>
-                  <p class="text-xs font-bold text-on-surface-variant opacity-60">({{ stats()?.totalSold || 0 }} sản phẩm đã bán)</p>
+            <div class="bg-white p-6 rounded-2xl col-span-2 shadow-sm border border-border flex flex-col gap-4">
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="text-[0.625rem] uppercase font-bold text-outline font-label mb-1">Tổng Hiệu Suất Kinh Doanh</p>
+                  <div class="flex items-baseline gap-2">
+                    <p class="text-3xl font-headline font-extrabold text-primary">${{ stats()?.totalRevenue | number:'1.0-0' }}</p>
+                    <p class="text-xs font-bold text-on-surface-variant opacity-60">({{ stats()?.totalSold || 0 }} sản phẩm đã bán)</p>
+                  </div>
+                </div>
+                <div class="bg-primary/10 w-12 h-12 rounded-xl text-primary flex items-center justify-center shrink-0">
+                  <span class="material-symbols-outlined text-2xl">analytics</span>
                 </div>
               </div>
-              <div class="bg-primary/10 p-4 rounded-2xl text-primary flex flex-col items-center">
-                <span class="material-symbols-outlined text-2xl">analytics</span>
+              <div class="w-full mt-2 h-[60px]">
+                <apx-chart
+                  [series]="performanceChartOptions.series"
+                  [chart]="performanceChartOptions.chart"
+                  [stroke]="performanceChartOptions.stroke"
+                  [fill]="performanceChartOptions.fill"
+                  [colors]="performanceChartOptions.colors"
+                  [tooltip]="performanceChartOptions.tooltip">
+                </apx-chart>
               </div>
             </div>
 
