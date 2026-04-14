@@ -1,5 +1,5 @@
 import { propertyMapper } from "@core/base";
-import { SupplierBO } from "../supplier";
+
 
 export class ProductBO {
     @propertyMapper('id', String)
@@ -35,8 +35,6 @@ export class ProductBO {
     @propertyMapper('supplierId', String)
     public supplierId: string = '';
 
-    @propertyMapper('supplier', SupplierBO)
-    public supplier: SupplierBO = new SupplierBO();
 
 
     @propertyMapper('qrCode', String)

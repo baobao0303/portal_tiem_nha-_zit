@@ -1,78 +1,91 @@
-# DESIGN.md - The Curated Emerald
-**Product**: Cho Design Admin Platform  
-**Atmosphere**: Sophisticated, managerial clarity, editorial luxury, curated green aesthetics.
+# Nexora Design System
 
 ## 1. Visual Theme & Atmosphere
-The Curated Emerald fuses high-end editorial aesthetics with robust data-density requirements of a modern e-commerce platform. The environment prioritizes an organic, almost architectural layout governed by subtle off-white surfaces (`surface`) and rich, dark green focal points (`primary`). It relies on sharp border contrasts rather than heavy background fills.
 
-## 2. Color Palette & Roles
+**Nexora** represents a premium, high-end SaaS aesthetic inspired by industry leaders like Linear and Framer. The atmospheric experience center is built around high-fidelity background visuals—specifically muted, looping cinematic videos—layered with high-transparency "Glassmorphism" surfaces.
 
-### Base & Surfaces
-- **Surface (Background)**: `#f7faf8` - The foundational canvas. An off-white with a very faint tint of mint.
-- **On-Surface (Text)**: `#181c1b` - Primary text color for maximum legibility without the harshness of pure black.
-- **Surface Variant**: `#e0e3e1` - Used for secondary panels or dividers.
-- **On-Surface Variant**: `#3e4946` - Muted text for subtitles and metadata.
+The design philosophy favors **transparency, depth, and motion**. Instead of solid solid colors, we use semi-transparent white surfaces (`rgba(255, 255, 255, 0.4)`) combined with heavy background blurs (`backdrop-filter: blur(20px)`) and ultra-fine white borders to create a "frosted glass" look that feels premium and light.
 
-### Accents & Brands
-- **Primary**: `#005147` - The "Curated Emerald". Used for primary buttons, active states, and focus elements.
-- **On-Primary**: `#ffffff` - Text on top of active primary areas.
-- **Primary Container**: `#006b5e` - Used for larger accent blocks, graphs, and less prominent highlights.
-- **Primary Fixed Dim**: `#83d5c5` - Softer green for chart distributions and inactive visual accents.
+**Key Characteristics:**
+- **Dynamic Backgrounds**: Use of preloaded cinematic background videos with static poster fallbacks.
+- **Glassmorphism**: Layered surfaces with transparency and blur.
+- **Serif Contrast**: The juxtaposition of elegant `Instrument Serif` headings against functional `Inter` body text.
+- **Micro-Animations**: Extensive use of entrance animations (fade-in, slide-up) to give a sense of life and responsiveness.
+- **Deep Elevation**: Use of large, soft shadows (`--shadow-dashboard`) to ground floating glass elements.
 
-### Semantic Status
-- **Error**: `#ba1a1a` - Serious destructive actions.
-- **Secondary (Info/Pending)**: `#005db7` (Blue) and `#8f4c36` (Warm Neutral).
+---
+
+## 2. Brand Identity & Colors
+
+We use an HSL-based design system for maximum flexibility and consistency.
+
+### Core Canvas (HSL)
+- **Background**: `hsl(0 0% 100%)` (White) — Primary surface color.
+- **Foreground**: `hsl(210 14% 17%)` (Dark Charcoal) — Primary text color.
+- **Primary**: `hsl(210 14% 17%)` — Branding and primary interactive elements.
+- **Accent**: `hsl(239 84% 67%)` (Vibrant Indigo) — Important highlights and active states.
+
+### Semantic Roles
+- **Muted**: `hsl(0 0% 96%)` / `hsl(184 5% 55%)` — Background fills and secondary text.
+- **Border**: `hsl(0 0% 90%)` — Default separation lines.
+- **Glass Border**: `rgba(255, 255, 255, 0.5)` — Specific for glassmorphic elements to catch light.
+
+---
 
 ## 3. Typography Rules
-The system employs a dual-typeface strategy to separate stylistic branding from data density.
 
-- **Headline (`font-headline`)**: `Manrope` (Weights: 200, 400, 600, 700, 800)
-  - *Usage*: Page titles, KPI numbers, Sidebar branding, and H1-H4.
-- **Body (`font-body`)**: `Inter` (Weights: 300, 400, 500, 600)
-  - *Usage*: Table rows, descriptions, input fields.
-- **Label (`font-label`)**: `Inter` (Uppercase, Tracking-Widest)
-  - *Usage*: Table headers, kicker tags, micro-copy. 
+Hierarchy is established through the interplay of a sophisticated Serif and a clear Sans-Serif.
 
-## 4. Component Stylings
+### Font Families
+- **Display/Headings**: `'Instrument Serif'`, serif. Used with dynamic italics for a bespoke feel.
+- **Body/UI**: `'Inter'`, sans-serif. Clean, highly legible, used for all functional text.
 
-### Navigation (Sidebar)
-- Fixed `w-64` layout.
-- Active state uses a heavy emerald border: `border-r-4 border-emerald-700 bg-emerald-100 font-bold`.
-- Inactive state: `text-emerald-700/70 font-medium hover:bg-emerald-100`.
+### Hierarchy Scale
 
-### KPI Bento Cards
-- Background: `bg-surface-container-lowest` (`#ffffff`) for maximum contrast against the `bg-surface`.
-- Border Radius: `.rounded-xl`.
-- Shadow: Subtle shadow offset `shadow-[0_4px_24px_rgba(0,0,0,0.02)]`.
-- Interaction: Micro-scale on hover `group hover:scale-[1.02] transition-transform duration-300`.
+| Role | Font | Weight | Note |
+|------|------|--------|------|
+| **Logo/Brand** | Body | 700+ | High tracking tightness |
+| **Hero Heading** | Display | 400 | Often italicized, large scale (3rem+) |
+| **Section Title** | Display | 600 | Tight letter-spacing (-0.02em) |
+| **Sub-headers** | Body | 600-700 | Uppercase with wide tracking for labels |
+| **Body Copy** | Body | 400-500 | Standard line-height 1.5 |
+| **Micro Labels** | Body | 500-600 | 11px size, 0.2em tracking |
 
-### Iconography
-- Uses **Google Material Symbols Outlined** natively via `<span class="material-symbols-outlined">`.
-- Default optical size: `opsz 24`, weight `400`.
+---
 
-## 5. Layout Principles
-- **Sidebar & Header**: The app follows a classic dashboard paradigm. Fixed left sidebar (`w-64`) and fixed top navbar with dynamic width margin `w-[calc(100%-16rem)]`.
-- **Content Padding**: The main viewport (`<main>`) utilizes generous spacing: `pt-24 px-8 pb-12` to ensure breathing room below the fixed 16px header.
-- **Bento Grids**: Analytics use responsive CSS Grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-4`).
+## 4. Component Standards
 
-## 6. Depth & Elevation
-- **Level 1 (App Canvas)**: `bg-surface` (`#f7faf8`).
-- **Level 2 (Cards & Areas)**: `bg-surface-container-lowest` (`#ffffff`) augmented with a 4px custom shadow spread to simulate paper-like layering.
-- **Level 3 (Sticky Navbars)**: Headers use `bg-white/80 backdrop-blur-md` for visual glassmorphism over scrolling content.
+### Glassmorphic Cards
+- **Background**: `rgba(255, 255, 255, 0.4)`
+- **Blur**: `backdrop-filter: blur(20px)`
+- **Border**: `1px solid rgba(255, 255, 255, 0.5)`
+- **Radius**: `3xl` (Rounded-3xl) for a soft, friendly feel.
+- **Inner Padding**: Typically `p-8` for content cards.
 
-## 7. Do's and Don'ts
-- **DO**: Use `Manrope` exclusively for large numeric metrics and page titles.
-- **DO**: Leverage `routerLinkActive` to apply heavy emerald right-borders on navigation lists.
-- **DON'T**: Use standard Tailwind `bg-blue-500` or generic colors. Always use the mapped `--color-*` token variables (e.g. `text-primary`).
-- **DON'T**: Use heavy drop shadows (`shadow-lg` or `shadow-xl`); this design relies on `0.02` opacity shadows for elite minimalism.
+### Interactive Elements
+- **Buttons (Primary)**: Rounded-xl, high shadow, primary HSL background.
+- **Inputs**: `bg-secondary/30` with `border-border`. Rounded-xl. Focus state uses `--color-accent` with a soft ring.
+- **Links**: Accent color, font-semibold, hover underline.
 
-## 8. Responsive Behavior
-- Sidebars dynamically adjust or require drawer-implementations below `lg`.
-- KPI Grids stack completely vertical on mobile, 2-column on iPad (`md`), 4-column on desktop (`lg`).
-- Tables strictly overflow-x via wrapper `<div class="overflow-x-auto">`.
+---
 
-## 9. Agent Prompt Guide
-**When instructing an AI to build components for this project:**
-- "Build a card using DESIGN.md. Use the KPI bento style with `bg-surface-container-lowest` and the 0.02 opacity shadow."
-- "Create a new form input. Use `font-body` for the text and `font-label` for uppercase labels."
-- "Add a new button. For primary actions, use `bg-primary text-on-primary`."
+## 5. Animation & Motion
+
+All new pages should feel "alive" through the following motion rules:
+
+### Entrance Animations (Tailwind CSS Animate)
+- **Primary Content**: `animate-in fade-in slide-in-from-bottom-8 duration-1000`.
+- **Secondary Elements**: Staggered delays (e.g., `delay-100`, `delay-200`) using `duration-700`.
+- **Transitions**: All hover states must use `transition-all duration-300` or `duration-500` for smooth property shifts.
+
+---
+
+## 6. Implementation Checklist
+
+When building new pages under the Nexora system:
+1. [ ] **Video Background**: Is the video preloaded in `index.html`? Does it have a `poster` image?
+2. [ ] **Typography**: Are headings using `font-display` (`Instrument Serif`)?
+3. [ ] **Centering**: Use `flex-grow flex flex-col items-center justify-center` for hero-style pages.
+4. [ ] **Glassmorphism**: Is the card using the blur + transparent border combination?
+5. [ ] **Animation**: Does the content fade in on load?
+6. [ ] **Iconography**: Use `lucide-angular` icons configured globally in `app.config.ts`.

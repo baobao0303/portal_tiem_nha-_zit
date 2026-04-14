@@ -28,54 +28,38 @@ export interface SelectOption {
     }
   ],
   template: `
-    <div class="relative w-full z-10" #dropdownWrapper>
-      <!-- Select Button -->
-      <button
-        type="button"
-        (click)="toggleOpen()"
-        [disabled]="disabled()"
-        [class]="buttonClass"
-        [class.ring-2]="isOpen()"
-        [class.ring-primary]="isOpen()"
-        [class.border-primary]="isOpen()"
-      >
-        <span class="block text-left truncate flex-1" [class.text-stone-400]="isPlaceholder()">
-          {{ displayLabel() }}
-        </span>
-        <span class="material-symbols-outlined shrink-0 text-[20px] text-stone-500 transition-transform duration-200"
-              [class.rotate-180]="isOpen()">expand_more</span>
-      </button>
+<div class="relative w-full z-10" #dropdownWrapper>
+  <button type="button" (click)="toggleOpen()" [disabled]="disabled()" [class]="buttonClass" [class.ring-2]="isOpen()" [class.ring-primary]="isOpen()" [class.border-primary]="isOpen()">
+    <span class="block text-left truncate flex-1 font-medium" [class.text-muted-foreground]="isPlaceholder()">{{ displayLabel() }}</span>
+    <span class="material-symbols-outlined shrink-0 text-[1.25rem] text-stone-500 transition-transform duration-200" [class.rotate-180]="isOpen()">expand_more</span>
+  </button>
 
-      <!-- Dropdown Menu -->
-      @if (isOpen()) {
-        <div class="absolute z-[100] mt-1.5 w-full bg-surface-container-lowest border border-outline-variant/10 rounded-xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] py-1.5 overflow-hidden origin-top focus:outline-none">
-          <ul class="max-h-60 overflow-y-auto focus:outline-none py-1">
-            @for (option of options; track option.value) {
-              <li
-                (click)="selectOption(option)"
-                class="relative cursor-pointer select-none py-2.5 pl-10 pr-4 text-sm font-semibold transition-colors hover:bg-emerald-50 hover:text-emerald-800"
-                [class.text-emerald-700]="option.value === internalValue()"
-                [class.bg-emerald-50]="option.value === internalValue()"
-                [class.text-on-surface]="option.value !== internalValue()"
-              >
-                <span class="block truncate">{{ option.label }}</span>
-                @if (option.value === internalValue()) {
-                  <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-emerald-600">
-                    <span class="material-symbols-outlined text-[18px] font-bold">check</span>
-                  </span>
-                }
-              </li>
+  @if (isOpen()) {
+    <div class="absolute z-[100] mt-1.5 w-full bg-white border border-border rounded-xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] py-1.5 overflow-hidden origin-top focus:outline-none">
+      <ul class="max-h-60 overflow-y-auto focus:outline-none py-1">
+        @for (option of options; track option.value) {
+          <li (click)="selectOption(option)"
+              class="relative cursor-pointer select-none py-2.5 pl-10 pr-4 text-sm font-semibold transition-colors hover:bg-primary/10 hover:text-primary"
+              [class.text-primary]="option.value === internalValue()"
+              [class.bg-gray-100]="option.value === internalValue()">
+            <span class="block truncate">{{ option.label }}</span>
+            @if (option.value === internalValue()) {
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-primary">
+                <span class="material-symbols-outlined text-[1.125rem] font-bold">check</span>
+              </span>
             }
-          </ul>
-        </div>
-      }
+          </li>
+        }
+      </ul>
     </div>
+  }
+</div>
   `
 })
 export class ZardSelectComponent implements ControlValueAccessor {
   @Input() options: SelectOption[] = [];
   @Input() placeholder: string = 'Select an option';
-  @Input() buttonClass: string = 'w-full flex items-center justify-between bg-surface-container-highest border-none rounded-lg px-4 py-3 font-headline text-base outline-none focus:ring-0 focus:border-[2px] focus:border-primary transition-all shadow-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
+  @Input() buttonClass: string = 'w-full flex items-center justify-between bg-white border border-border rounded-lg px-4 py-3 font-headline text-base outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
   private elementRef = inject(ElementRef);
   
@@ -95,8 +79,8 @@ export class ZardSelectComponent implements ControlValueAccessor {
     return found ? found.label : this.placeholder;
   });
 
-  onChange: any = () => {};
-  onTouch: any = () => {};
+  onChange: any = () => { };
+  onTouch: any = () => { };
 
   toggleOpen() {
     if (!this.disabled()) {

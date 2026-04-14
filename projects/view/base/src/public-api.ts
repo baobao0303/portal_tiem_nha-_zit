@@ -5,7 +5,6 @@
 export * from './lib/commands';
 export * from './lib/contexts';
 export * from './lib/directives';
-export * from './lib/file-queue-item';
 export * from './lib/pipes';
 export * from './lib/view.active';
 export * from './lib/view.active.registry';

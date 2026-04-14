@@ -1,10 +1,146 @@
-<div class="space-y-6">
-  <div>
-    <h2 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">Orders</h2>
-    <p class="text-zinc-500 mt-2">View and track customer orders.</p>
+<div class="animate-in fade-in duration-1000">
+  <!-- Header Section -->
+  <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="animate-in slide-in-from-left-4 duration-700">
+      <h2 class="text-4xl font-display text-foreground tracking-tight leading-none">Order <span class="italic text-accent">Management</span></h2>
+      <p class="text-muted-foreground mt-3 text-sm font-medium tracking-wide uppercase opacity-70">Monitor transactions and update fulfillment status.</p>
+    </div>
+  </header>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10 animate-in slide-in-from-bottom-4 duration-700">
+    <div class="bg-white rounded-3xl p-6 border border-primary/5 shadow-sm">
+      <div class="flex items-center gap-4 text-muted-foreground mb-4">
+        <lucide-icon name="list-ordered" class="w-5 h-5"></lucide-icon>
+        <span class="text-xs font-bold uppercase tracking-wider">Tổng đơn</span>
+      </div>
+      <div class="text-3xl font-display font-medium text-foreground">{{ totalOrders() }}</div>
+    </div>
+    
+    <div class="bg-amber-50/50 rounded-3xl p-6 border border-amber-500/10 shadow-sm relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/5 rounded-full blur-[1.25rem]"></div>
+      <div class="flex items-center gap-4 text-amber-700 mb-4 relative z-10">
+        <lucide-icon name="clock" class="w-5 h-5"></lucide-icon>
+        <span class="text-xs font-bold uppercase tracking-wider">Chờ thanh toán</span>
+      </div>
+      <div class="text-3xl font-display font-medium text-amber-900 relative z-10">{{ pendingCount() }}</div>
+    </div>
+    
+    <div class="bg-blue-50/50 rounded-3xl p-6 border border-blue-500/10 shadow-sm relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/5 rounded-full blur-[1.25rem]"></div>
+      <div class="flex items-center gap-4 text-blue-700 mb-4 relative z-10">
+        <lucide-icon name="truck" class="w-5 h-5"></lucide-icon>
+        <span class="text-xs font-bold uppercase tracking-wider">Đang vận chuyển</span>
+      </div>
+      <div class="text-3xl font-display font-medium text-blue-900 relative z-10">{{ shippingCount() }}</div>
+    </div>
+
+    <div class="bg-emerald-50/50 rounded-3xl p-6 border border-emerald-500/10 shadow-sm relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/5 rounded-full blur-[1.25rem]"></div>
+      <div class="flex items-center gap-4 text-emerald-700 mb-4 relative z-10">
+        <lucide-icon name="check-circle-2" class="w-5 h-5"></lucide-icon>
+        <span class="text-xs font-bold uppercase tracking-wider">Hoàn thành</span>
+      </div>
+      <div class="text-3xl font-display font-medium text-emerald-900 relative z-10">{{ completedCount() }}</div>
+    </div>
   </div>
   
-  <div class="p-12 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/30">
-    <p class="text-zinc-500">Orders listing goes here...</p>
+  <!-- Main Content Area -->
+  <div class="bg-white/90 backdrop-blur-xl border border-primary/10 rounded-[2.5rem] shadow-dashboard overflow-hidden animate-in slide-in-from-bottom-8 duration-700">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-primary/5">
+            <th class="px-8 py-6 text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] bg-muted/20">Mã đơn</th>
+            <th class="px-8 py-6 text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] bg-muted/20">Khách hàng</th>
+            <th class="px-8 py-6 text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] bg-muted/20">Thanh toán</th>
+            <th class="px-8 py-6 text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] bg-muted/20">Tổng tiền</th>
+            <th class="px-8 py-6 text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] bg-muted/20">Trạng thái</th>
+            <th class="px-8 py-6 text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] bg-muted/20 text-right">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loading State -->
+          <tr *ngIf="isLoading()" class="border-b border-primary/5">
+            <td colspan="6" class="px-8 py-16 text-center">
+              <div class="inline-flex items-center gap-3 text-muted-foreground">
+                <div class="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                <span class="text-sm font-medium tracking-wide">Đang tải dữ liệu...</span>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="!isLoading() && orders().length === 0" class="border-b border-primary/5">
+            <td colspan="6" class="px-8 py-24 text-center">
+              <div class="w-16 h-16 bg-muted/30 text-muted-foreground mx-auto rounded-2xl flex items-center justify-center mb-4">
+                <lucide-icon name="inbox" class="h-8 w-8 opacity-50"></lucide-icon>
+              </div>
+              <h4 class="text-lg font-display font-medium text-foreground mb-1">Chưa có đơn hàng nào</h4>
+              <p class="text-sm text-muted-foreground">Các đơn hàng mới sẽ xuất hiện tại đây.</p>
+            </td>
+          </tr>
+
+          <!-- Data Rows -->
+          <tr *ngFor="let order of orders()" class="border-b border-primary/5 hover:bg-muted/10 transition-colors group">
+            <td class="px-8 py-6">
+              <div class="flex flex-col">
+                <span class="font-display font-medium text-foreground truncate max-w-[7.5rem]" title="{{order.id}}">#{{ order.id.substring(0, 8) }}...</span>
+                <span class="text-xs text-muted-foreground mt-1">{{ formatDate(order.created_at) }}</span>
+              </div>
+            </td>
+            <td class="px-8 py-6">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-primary/5 text-primary flex items-center justify-center text-xs font-bold">
+                  {{ order.shipping_address?.fullName?.charAt(0) || 'U' }}
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-medium text-foreground">{{ order.shipping_address?.fullName || 'Khách vãng lai' }}</span>
+                  <span class="text-xs text-muted-foreground mt-0.5">{{ order.shipping_address?.phone || '-' }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="px-8 py-6">
+              <div class="inline-flex items-center gap-2 px-3 py-1 bg-muted/30 rounded-md border border-primary/5 text-xs font-medium text-foreground">
+                <lucide-icon name="credit-card" class="h-3.5 w-3.5 text-muted-foreground"></lucide-icon>
+                {{ order.payment_method === 'TRANSFER' ? 'Chuyển khoản' : order.payment_method }}
+              </div>
+            </td>
+            <td class="px-8 py-6">
+              <span class="font-display font-medium text-foreground whitespace-nowrap">{{ formatPrice(order.total_vnd) }}</span>
+            </td>
+            <td class="px-8 py-6">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wide {{ getStatusBadge(order.status).bg }} {{ getStatusBadge(order.status).textCol }}">
+                <lucide-icon [name]="getStatusBadge(order.status).icon" class="w-3.5 h-3.5"></lucide-icon>
+                {{ getStatusBadge(order.status).text }}
+              </span>
+            </td>
+            <td class="px-8 py-6 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <button 
+                  *ngIf="order.status === 'PENDING'"
+                  (click)="updateStatus(order.id, 'SHIPPING')"
+                  class="h-9 px-4 inline-flex items-center justify-center gap-2 rounded-lg bg-accent text-accent-foreground font-medium text-xs hover:bg-accent/90 transition-colors shadow-sm whitespace-nowrap"
+                >
+                  <lucide-icon name="check" class="h-3.5 w-3.5"></lucide-icon>
+                  Xác nhận đã nhận tiền
+                </button>
+                <button 
+                  *ngIf="order.status === 'SHIPPING'"
+                  (click)="updateStatus(order.id, 'COMPLETED')"
+                  class="h-9 px-4 inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 text-white font-medium text-xs hover:bg-emerald-700 transition-colors shadow-sm whitespace-nowrap"
+                >
+                  <lucide-icon name="flag" class="h-3.5 w-3.5"></lucide-icon>
+                  Hoàn thành đơn
+                </button>
+                <button class="h-9 w-9 inline-flex items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors group-hover:bg-white">
+                  <lucide-icon name="more-horizontal" class="h-4 w-4"></lucide-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

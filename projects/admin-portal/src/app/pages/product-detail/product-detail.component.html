@@ -1,0 +1,476 @@
+<main class="min-h-screen px-4 md:px-12 py-8 bg-surface-container-lowest">
+  <!-- Global Breadcrumbs -->
+  <nav class="flex items-center gap-2 text-on-surface-variant text-xs mb-8 font-label uppercase tracking-widest opacity-70">
+    <a routerLink="/dashboard" class="hover:text-primary transition-colors cursor-pointer">Admin</a>
+    <span class="material-symbols-outlined text-[0.875rem]">chevron_right</span>
+    <a routerLink="/products" class="hover:text-primary transition-colors cursor-pointer">Kho Hàng</a>
+    <span class="material-symbols-outlined text-[0.875rem]">chevron_right</span>
+    <span class="text-primary font-bold">Chi Tiết Sản Phẩm</span>
+  </nav>
+
+  @if (isEditMode()) {
+    <!-- Premium Edit Mode UI -->
+    <div class="grid grid-cols-12 gap-8" [formGroup]="productForm">
+      
+      <!-- Left Column: Core Product Content (8) -->
+      <div class="col-span-12 lg:col-span-8 space-y-8">
+        
+        <!-- Media Management Card -->
+        <section class="bg-white rounded-2xl p-6 border border-border shadow-sm">
+          <div class="grid grid-cols-1 gap-12">
+            <!-- Main Preview Area -->
+            <div class="relative group mx-auto w-full max-w-4xl">
+              <div class="aspect-video bg-surface-variant rounded-xl overflow-hidden border border-outline-variant/10 shadow-inner relative">
+                @if (mainMedia()) {
+                  @if (mainMedia()?.type === 'video') {
+                    <video class="w-full h-full object-cover block" [src]="mainMediaUrl()" controls autoplay muted loop></video>
+                  } @else {
+                    <img class="w-full h-full object-cover block transition-transform duration-700 group-hover:scale-105" [src]="mainMediaUrl()" alt="Product Image"/>
+                  }
+                } @else {
+                  <div class="w-full h-full flex flex-col items-center justify-center text-on-surface-variant/40">
+                    <span class="material-symbols-outlined text-5xl mb-2">image</span>
+                    <p class="text-xs font-bold font-label uppercase tracking-widest">Chưa Có Hình Ảnh/Video</p>
+                  </div>
+                }
+              </div>
+              
+              <!-- Replace Trigger -->
+              <input type="file" #fileEditInput class="hidden" accept="image/*,video/*" multiple (change)="onFileSelected($event)" />
+              <button (click)="fileEditInput.click()" type="button"
+                      class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[0.625rem] font-bold flex items-center gap-2 hover:bg-white shadow-lg transition-all border border-outline-variant/20 hover:scale-105 active:scale-95">
+                <span class="material-symbols-outlined text-sm">photo_camera</span>
+                {{ isUploading() ? 'Đang Tải...' : 'Thay Đổi Media' }}
+              </button>
+            </div>
+
+            <!-- Enhanced Thumbnail Gallery -->
+            <div class="grid grid-cols-4 gap-4">
+              @for (item of uploadedMedia().slice(0, 4); track $index) {
+                <div class="relative aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition-all hover:scale-[1.05] group"
+                     [ngClass]="selectedIndex() === $index ? 'border-primary shadow-md' : 'border-transparent'"
+                     (click)="selectedIndex.set($index)">
+                  
+                  <!-- Sequence Badge -->
+                  <div class="absolute top-2 left-2 w-6 h-6 rounded-full flex items-center justify-center font-bold text-[0.625rem] shadow-lg z-10 transition-all font-label"
+                       [ngClass]="selectedIndex() === $index ? 'bg-primary text-white' : 'bg-white/90 text-primary-600'">
+                    {{ $index + 1 }}
+                  </div>
+                  
+                  <img [src]="item.url" class="w-full h-full object-cover block" />
+                  
+                  @if (item.type === 'video') {
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/10 transition-colors group-hover:bg-black/20">
+                      <span class="material-symbols-outlined text-white text-2xl drop-shadow-md">play_circle</span>
+                    </div>
+                  }
+
+                  <!-- Multi-Page Overflow Overlay -->
+                  @if ($index === 3 && uploadedMedia().length > 4) {
+                    <div class="absolute inset-0 bg-primary/40 backdrop-blur-[0.125rem] flex items-center justify-center pointer-events-none">
+                      <span class="text-white font-bold text-lg">+{{ uploadedMedia().length - 3 }}</span>
+                    </div>
+                  }
+
+                  <!-- Quick Remove -->
+                  <button (click)="$event.stopPropagation(); removeMedia($index)" type="button"
+                          class="absolute top-1 right-1 w-6 h-6 bg-error text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                    <span class="material-symbols-outlined text-[0.875rem]">close</span>
+                  </button>
+                </div>
+              }
+              
+              <!-- Empty Slot Integration -->
+              @for (empty of emptySlots(); track $index) {
+                <div (click)="fileEditInput.click()" 
+                     class="aspect-square rounded-xl border-2 border-dashed border-border flex items-center justify-center text-outline-variant hover:border-primary/40 hover:text-primary transition-all cursor-pointer bg-surface-container-low">
+                  <span class="material-symbols-outlined">add</span>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- Product Details Section -->
+        <section class="bg-white rounded-2xl p-6 border border-border shadow-sm">
+          <div class="flex flex-col gap-8">
+            <h3 class="text-sm font-bold font-headline uppercase tracking-widest text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-lg">info</span>
+              Thông Tin Cơ Bản
+            </h3>
+            
+            <div class="flex flex-col gap-6">
+              <div class="group">
+                <label class="text-[0.625rem] font-bold text-outline uppercase tracking-[0.2em] font-label mb-2 block">Tên Sản Phẩm</label>
+                <input formControlName="name" type="text" placeholder="Nhập tên sản phẩm..."
+                       class="w-full bg-surface-container-low border border-border rounded-xl px-5 py-4 font-body text-base focus:ring-2 focus:ring-primary/20 text-on-surface transition-all outline-none"/>
+              </div>
+
+              <!-- SEO Slug (URL) Field -->
+              <div class="group">
+                <label class="text-[0.625rem] font-bold text-outline uppercase tracking-[0.2em] font-label mb-2 block">Đường dẫn SEO (Slug)</label>
+                <div class="flex items-center bg-surface-container-low border border-border rounded-xl px-5 py-4 focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+                  <span class="text-on-surface-variant/40 text-sm font-label mr-1">tiemnhazit.vn/products/</span>
+                  <input formControlName="slug" type="text" placeholder="ten-san-pham"
+                         class="flex-1 bg-transparent font-body text-base text-primary font-bold outline-none"/>
+                  <span class="material-symbols-outlined text-primary/40 text-sm">link</span>
+                </div>
+                <p class="text-[0.5625rem] mt-2 text-outline-variant font-medium px-1 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[0.75rem]">info</span>
+                  Đường dẫn này giúp sản phẩm dễ tìm thấy hơn trên Google.
+                </p>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-6">
+                <div class="group">
+                  <label class="text-[0.625rem] font-bold text-outline uppercase tracking-[0.2em] font-label mb-2 block">Mã SKU</label>
+                  <input formControlName="sku" type="text" placeholder="SKU-001"
+                         class="w-full bg-surface-container-low border border-border rounded-xl px-5 py-4 font-body text-base focus:ring-2 focus:ring-primary/20 uppercase text-on-surface transition-all outline-none"/>
+                </div>
+                <div class="group">
+                  <label class="text-[0.625rem] font-bold text-outline uppercase tracking-[0.2em] font-label mb-2 block">Danh Mục</label>
+                  <zard-select formControlName="categoryId" 
+                               [options]="categoryOptions()" 
+                               placeholder="Chọn Danh Mục"
+                               buttonClass="w-full flex items-center justify-between bg-white border border-border rounded-xl px-5 py-4 font-body text-base outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm cursor-pointer h-[3.5rem]">
+                  </zard-select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-6">
+                <div class="group">
+                  <label class="text-[0.625rem] font-bold text-outline uppercase tracking-[0.2em] font-label mb-2 block">Giá Bán</label>
+                  <div class="relative flex items-center">
+                    <input type="text" [value]="formattedPrice" (input)="onPriceInput($event)" placeholder="0"
+                           class="w-full bg-surface-container-low border border-border rounded-xl px-5 py-4 font-bold text-lg text-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none pr-16"/>
+                    <span class="absolute right-5 text-xs font-bold text-outline uppercase tracking-widest pointer-events-none">{{ productForm.get('currency')?.value }}</span>
+                  </div>
+                </div>
+                <div class="group">
+                  <label class="text-[0.625rem] font-bold text-outline uppercase tracking-[0.2em] font-label mb-2 block">Số Lượng Tồn Kho</label>
+                  <input formControlName="stockQuantity" type="number"
+                         class="w-full bg-surface-container-low border border-border rounded-xl px-5 py-4 font-body text-base focus:ring-2 focus:ring-primary/20 text-on-surface transition-all outline-none"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Rich Text Description -->
+        <section class="bg-white rounded-2xl p-6 border border-border shadow-sm">
+          <label class="text-[0.625rem] font-bold text-outline uppercase tracking-[0.2em] font-label mb-6 block">Mô Tả Sản Phẩm</label>
+          <div class="border border-border rounded-xl overflow-hidden shadow-inner bg-white">
+            <quill-editor 
+              formControlName="description"
+              [modules]="quillModules"
+              class="w-full"
+              [styles]="{height: '300px', border: 'none'}"
+              placeholder="Kể câu chuyện về tâm hồn của tác phẩm này..."
+              theme="snow">
+            </quill-editor>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Stats & Meta (4) -->
+      <div class="col-span-12 lg:col-span-4 space-y-8">
+        
+        <!-- Action Center -->
+        <section class="bg-white rounded-2xl p-6 border border-border shadow-md space-y-4">
+          <h3 class="font-headline font-bold text-primary flex items-center gap-2 text-sm px-2">
+            <span class="material-symbols-outlined text-lg">rocket_launch</span>
+            Thao Tác Cập Nhật
+          </h3>
+          <div class="space-y-3">
+            <button (click)="onSubmit()" [disabled]="productForm.invalid || isSubmitting()" type="button"
+                    class="w-full bg-primary text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:scale-[1.02] transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:grayscale">
+              <span class="material-symbols-outlined text-xl">save</span>
+              {{ isSubmitting() ? 'Đang Lưu...' : 'Lưu Thay Đổi' }}
+            </button>
+            
+            <a [href]="'http://localhost:3000/products/' + (productForm.get('slug')?.value || productId())" target="_blank"
+               class="w-full bg-white text-primary py-4 rounded-xl font-bold flex items-center justify-center gap-3 border border-primary/20 hover:bg-primary/5 transition-all shadow-sm">
+              <span class="material-symbols-outlined text-xl">visibility</span>
+              Xem Ngoài Cửa Hàng
+            </a>
+
+            <div class="pt-4 border-t border-border mt-4">
+              <button (click)="archiveProduct()" type="button"
+                      class="w-full bg-error/5 text-error py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-error/10 transition-all border border-error/20">
+                <span class="material-symbols-outlined text-xl">archive</span>
+                Lưu Trữ Sản Phẩm
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dynamic Statistics -->
+        <section class="space-y-6">
+          <h3 class="font-headline font-bold text-primary flex items-center gap-2 text-sm px-2">
+            <span class="material-symbols-outlined text-lg">analytics</span>
+            Chỉ Số Hiệu Suất
+          </h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white p-6 rounded-2xl col-span-2 flex items-center justify-between shadow-sm border border-border">
+              <div>
+                <p class="text-[0.625rem] uppercase font-bold text-outline font-label mb-1">Tổng Hiệu Suất Kinh Doanh</p>
+                <div class="flex items-baseline gap-2">
+                  <p class="text-3xl font-headline font-extrabold text-primary">${{ stats()?.totalRevenue | number:'1.0-0' }}</p>
+                  <p class="text-xs font-bold text-on-surface-variant opacity-60">({{ stats()?.totalSold || 0 }} sản phẩm đã bán)</p>
+                </div>
+              </div>
+              <div class="bg-primary/10 p-4 rounded-2xl text-primary flex flex-col items-center">
+                <span class="material-symbols-outlined text-2xl">analytics</span>
+              </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-border">
+              <p class="text-[0.625rem] uppercase font-bold text-outline font-label">Tốc Độ Bán Hàng</p>
+              <div class="flex items-end gap-1.5 mt-2">
+                <p class="text-2xl font-bold text-on-surface">{{ stats()?.salesVelocity }}</p>
+                <p class="text-[0.625rem] text-primary font-bold mb-1 uppercase tracking-tighter">/ tuần</p>
+              </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-border">
+              <p class="text-[0.625rem] uppercase font-bold text-outline font-label">Tỷ Lệ Trả Hàng</p>
+              <div class="flex items-end gap-2 mt-2">
+                <p class="text-2xl font-bold text-error">{{ stats()?.returnRate }}%</p>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl col-span-2 shadow-sm border border-border">
+              <div class="flex justify-between items-center mb-4">
+                <p class="text-[0.625rem] uppercase font-bold text-outline font-label">Sức Khỏe Kho Hàng</p>
+                <span class="bg-primary/10 text-primary text-[0.625rem] px-2 py-0.5 rounded-full font-bold">{{ stats()?.inventoryHealth }}% Tốt</span>
+              </div>
+              <div class="h-2.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                <div class="h-full bg-primary rounded-full transition-all duration-1000" [style.width.%]="stats()?.inventoryHealth"></div>
+              </div>
+              <div class="flex justify-between mt-3 text-[0.625rem] font-bold text-on-surface-variant font-label">
+                <span class="opacity-60 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                  Ngưỡng Nhập Hàng: 5
+                </span>
+                <span class="text-primary">Hiện Tại: {{ productForm.get('stockQuantity')?.value }}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Historical Logs -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-border">
+          <h3 class="font-headline font-bold text-primary mb-8 text-[0.6875rem] uppercase tracking-[0.2em] flex items-center gap-2 opacity-80">
+            <span class="material-symbols-outlined text-base">history_edu</span>
+            Lịch Sử Thay Đổi
+          </h3>
+          
+          <div class="space-y-10 relative ml-4 border-l-2 border-dashed border-border/60 pl-10">
+            @for (log of logs(); track log.id) {
+              <div class="relative group">
+                <!-- Action Specific Icon Dot: Precise Center Alignment -->
+                <div class="absolute -left-[3.5625rem] top-0 w-8 h-8 rounded-full border-2 border-white shadow-md flex items-center justify-center transition-all group-hover:scale-110 z-10"
+                     [ngClass]="{
+                       'bg-primary text-white shadow-primary/20': log.action.includes('details'),
+                       'bg-emerald-100 text-emerald-700 border-emerald-50': log.action.includes('Price'),
+                       'bg-blue-100 text-blue-700 border-blue-50': log.action.includes('Image') || log.action.includes('media'),
+                       'bg-gray-100 text-gray-700 border-gray-50': !log.action.includes('Price') && !log.action.includes('details') && !log.action.includes('Image')
+                     }">
+                  <span class="material-symbols-outlined text-[1.0rem] leading-none select-none">
+                    {{ log.action.includes('details') ? 'edit_note' : 
+                       log.action.includes('Price') ? 'payments' : 
+                       log.action.includes('Image') || log.action.includes('media') ? 'image' : 'history' }}
+                  </span>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-border/40 shadow-sm hover:border-border transition-all hover:bg-white hover:shadow-md">
+                  <p class="text-[0.6875rem] font-bold tracking-tight mb-2"
+                     [ngClass]="{
+                       'text-primary': log.action.includes('details'),
+                       'text-emerald-800': log.action.includes('Price'),
+                       'text-blue-800': log.action.includes('Image') || log.action.includes('media'),
+                       'text-on-surface': !log.action.includes('Price') && !log.action.includes('details') && !log.action.includes('Image')
+                     }">
+                    {{ log.action === 'Product details updated by Admin' ? 'Cập nhật thông tin chi tiết' : 
+                       log.action === 'Price updated by Admin' ? 'Cập nhật giá bán' :
+                       log.action === 'Image replaced' ? 'Thay đổi hình ảnh' : log.action }}
+                  </p>
+                  
+                  <div class="flex items-center gap-3">
+                    <p class="text-[0.5625rem] text-outline font-label flex items-center gap-1 opacity-70">
+                      <span class="material-symbols-outlined text-[0.75rem]">schedule</span>
+                      {{ log.createdAt | date:'dd/MM, HH:mm' }}
+                    </p>
+                    <span class="w-1 h-1 rounded-full bg-border"></span>
+                    <p class="text-[0.5rem] uppercase font-bold tracking-widest text-primary/60">{{ log.adminName || 'Hệ Thống' }}</p>
+                  </div>
+                </div>
+              </div>
+            } @empty {
+              <div class="py-8 text-center bg-gray-50 rounded-2xl border border-dashed border-border">
+                <span class="material-symbols-outlined text-border text-3xl mb-2">event_busy</span>
+                <p class="text-[0.625rem] text-outline italic font-label">Chưa có hoạt động nào được ghi lại.</p>
+              </div>
+            }
+          </div>
+        </section>
+      </div>
+    </div>
+
+  } @else {
+    <!-- Reconstructed Add Mode UI -->
+    <header class="mb-12">
+      <h2 class="text-4xl font-extrabold font-headline tracking-tighter text-on-surface mb-2">Tạo Sản Phẩm Mới</h2>
+      <p class="text-on-surface-variant max-w-2xl opacity-80">Thêm tác phẩm mới nhất của bạn vào danh mục hàng hóa.</p>
+    </header>
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column: Details (7) -->
+      <div class="col-span-12 lg:col-span-7 space-y-8">
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-border">
+          <h3 class="text-sm font-bold font-headline mb-8 flex items-center gap-3 text-primary uppercase tracking-widest">
+            <span class="material-symbols-outlined bg-primary/10 p-2 rounded-xl text-lg">description</span>
+            Thông Tin Cơ Bản
+          </h3>
+          
+          <div class="space-y-8">
+            <div class="group">
+              <label class="block text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant font-label mb-3">Tên Sản Phẩm *</label>
+              <input formControlName="name" type="text" placeholder="VD: Khăn Lụa Thêu Tay" 
+                     class="w-full bg-surface-container-low border border-border rounded-xl px-5 py-4 font-medium focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+            </div>
+
+            <!-- SEO Slug (URL) Field for Add Mode -->
+            <div class="group">
+              <label class="block text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant font-label mb-3">Đường dẫn SEO (Slug) *</label>
+              <div class="flex items-center bg-surface-container-low border border-border rounded-xl px-5 py-4 focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+                <span class="text-on-surface-variant/40 text-sm font-label mr-1">tiemnhazit.vn/products/</span>
+                <input formControlName="slug" type="text" placeholder="ten-san-pham"
+                       class="flex-1 bg-transparent font-medium text-base text-primary outline-none"/>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant font-label mb-3">Mã SKU *</label>
+                <input formControlName="sku" type="text" placeholder="VIT-001" 
+                       class="w-full bg-surface-container-low border border-border rounded-xl px-5 py-4 font-medium focus:ring-2 focus:ring-primary/20 transition-all uppercase outline-none" />
+              </div>
+              <div class="group">
+                <label class="block text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant font-label mb-3">Danh Mục</label>
+                <zard-select formControlName="categoryId" 
+                             [options]="categoryOptions()" 
+                             placeholder="Chọn Danh Mục"
+                             buttonClass="w-full flex items-center justify-between bg-white border border-border rounded-xl px-5 py-4 font-body text-base outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm cursor-pointer h-[3.5rem]">
+                </zard-select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+              <div class="group">
+                <label class="block text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant font-label mb-3">Giá Bán *</label>
+                <div class="relative flex items-center">
+                  <input type="text" [value]="formattedPrice" (input)="onPriceInput($event)" placeholder="0"
+                         class="w-full bg-surface-container-low border border-border rounded-xl px-5 py-4 font-bold text-xl text-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none pr-16" />
+                  <span class="absolute right-5 text-xs font-bold text-outline uppercase tracking-widest pointer-events-none">{{ productForm.get('currency')?.value }}</span>
+                </div>
+              </div>
+              <div class="group">
+                <label class="block text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant font-label mb-3">Số Lượng Ban Đầu *</label>
+                <input formControlName="stockQuantity" type="number" 
+                       class="w-full bg-surface-container-low border border-border rounded-xl px-5 py-4 font-medium focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+              </div>
+            </div>
+
+            <div class="group">
+              <label class="block text-[0.625rem] font-bold uppercase tracking-widest text-on-surface-variant font-label mb-3">Mô Tả Sản Phẩm</label>
+              <div class="border border-border rounded-xl overflow-hidden shadow-inner bg-white">
+                <quill-editor 
+                  formControlName="description"
+                  [modules]="quillModules"
+                  class="w-full"
+                  [styles]="{height: '250px', border: 'none'}"
+                  placeholder="Kể về câu chuyện của sản phẩm này..."
+                  theme="snow">
+                </quill-editor>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Media (5) -->
+      <div class="col-span-12 lg:col-span-5 space-y-8">
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-border">
+          <h3 class="text-sm font-bold font-headline mb-8 flex items-center gap-3 text-primary uppercase tracking-widest">
+            <span class="material-symbols-outlined bg-primary/10 p-2 rounded-xl text-lg">photo_library</span>
+            Hình Ảnh & Video
+          </h3>
+          
+          <input type="file" #fileAddInput class="hidden" accept="image/*,video/*" multiple (change)="onFileSelected($event)" />
+          
+          <div (click)="fileAddInput.click()" class="w-full aspect-video bg-surface-container-low rounded-2xl border-2 border-dashed border-border hover:border-primary/50 transition-all cursor-pointer group mb-6 overflow-hidden relative">
+            @if (mainMedia()) {
+              @if (mainMedia()?.type === 'video') {
+                <video class="w-full h-full object-cover block" [src]="mainMediaUrl()" controls autoplay muted loop></video>
+              } @else {
+                <img [src]="mainMediaUrl()" class="w-full h-full object-cover block" />
+              }
+            } @else {
+              <div class="absolute inset-0 flex flex-col items-center justify-center p-8">
+                <span class="material-symbols-outlined text-5xl text-primary/30 group-hover:scale-110 transition-transform mb-4">cloud_upload</span>
+                <p class="font-bold text-on-surface tracking-tight uppercase text-xs">Tải Media Lên</p>
+              </div>
+            }
+          </div>
+
+          <!-- Thumbnail Gallery -->
+          <div class="grid grid-cols-4 gap-4 mb-8">
+            @for (item of uploadedMedia().slice(0, 4); track $index) {
+              <div class="relative aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition-all hover:scale-105 group"
+                   [ngClass]="selectedIndex() === $index ? 'border-primary shadow-md' : 'border-transparent'"
+                   (click)="selectedIndex.set($index)">
+                
+                <div class="absolute top-2 left-2 w-6 h-6 rounded-full flex items-center justify-center font-bold text-[0.625rem] shadow-lg z-10 transition-all"
+                     [ngClass]="selectedIndex() === $index ? 'bg-primary text-white' : 'bg-white/90 text-primary-600'">
+                  {{ $index + 1 }}
+                </div>
+
+                <img [src]="item.url" class="w-full h-full object-cover block" />
+                
+                @if (item.type === 'video') {
+                  <div class="absolute inset-0 flex items-center justify-center bg-black/5">
+                    <span class="material-symbols-outlined text-white text-2xl drop-shadow-md">play_circle</span>
+                  </div>
+                }
+
+                @if ($index === 3 && uploadedMedia().length > 4) {
+                  <div class="absolute inset-0 bg-primary/40 backdrop-blur-[0.125rem] flex items-center justify-center pointer-events-none">
+                    <span class="text-white font-bold text-lg">+{{ uploadedMedia().length - 3 }}</span>
+                  </div>
+                }
+
+                <button (click)="$event.stopPropagation(); removeMedia($index)" type="button"
+                        class="absolute top-1 right-1 w-6 h-6 bg-error text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span class="material-symbols-outlined text-[0.875rem]">close</span>
+                </button>
+              </div>
+            }
+            @for (empty of emptySlots(); track $index) {
+              <div (click)="fileAddInput.click()" class="aspect-square rounded-xl border-2 border-dashed border-border flex items-center justify-center text-outline-variant hover:border-primary/40 transition-all cursor-pointer bg-surface-container-low">
+                <span class="material-symbols-outlined">add</span>
+              </div>
+            }
+          </div>
+
+          <button type="submit" [disabled]="productForm.invalid || isSubmitting()"
+                  class="w-full bg-primary text-white py-5 rounded-2xl font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3">
+            <span class="material-symbols-outlined">add_circle</span>
+            {{ isSubmitting() ? 'Đang Tạo Sản Phẩm...' : 'Tạo Sản Phẩm' }}
+          </button>
+        </section>
+      </div>
+    </form>
+  }
+</main>

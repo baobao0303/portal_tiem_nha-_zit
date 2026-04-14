@@ -22,6 +22,22 @@ export class AuthWriteableRepository extends WriteableRepository {
   }
 
   /**
+   * Logs in an admin using Google OAuth data.
+   */
+  public loginWithGoogle(payload: {
+    provider: string;
+    email: string;
+    fullName?: string;
+    avatarUrl?: string;
+  }): Observable<SignInResponse> {
+    return this.httpClient.post<{ success: boolean; data: { admin: SignInResponse }; message?: string }>(
+      '/api/admin/auth/login',
+      payload,
+      this.mergeOptions({ withCredentials: true })
+    ).pipe(map((res) => res.data.admin));
+  }
+
+  /**
    * Logs out the admin securely by calling the API to destroy the HttpOnly cookie.
    */
   public logout(): Observable<any> {

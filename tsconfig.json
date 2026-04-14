@@ -21,52 +21,52 @@
         "projects/admin-portal/src/app/*"
       ],
       "@application/base": [
-        "dist/application/base",
-        "./projects/application/base/src/public-api.ts"
+        "./projects/application/base/src/public-api.ts",
+        "dist/application/base"
       ],
       "@application/commands": [
-        "dist/application/commands",
-        "./projects/application/commands/src/public-api.ts"
+        "./projects/application/commands/src/public-api.ts",
+        "dist/application/commands"
       ],
       "@application/helpers": [
-        "dist/application/helpers",
-        "./projects/application/helpers/src/public-api.ts"
+        "./projects/application/helpers/src/public-api.ts",
+        "dist/application/helpers"
       ],
       "@application/messages": [
-        "dist/application/messages",
-        "./projects/application/messages/src/public-api.ts"
+        "./projects/application/messages/src/public-api.ts",
+        "dist/application/messages"
       ],
       "@application/queries": [
-        "dist/application/queries",
-        "./projects/application/queries/src/public-api.ts"
+        "./projects/application/queries/src/public-api.ts",
+        "dist/application/queries"
       ],
       "@core/base": [
-        "dist/core/base",
-        "./projects/core/base/src/public-api.ts"
+        "./projects/core/base/src/public-api.ts",
+        "dist/core/base"
       ],
       "@core/domain": [
-        "dist/core/domain",
-        "./projects/core/domain/src/public-api.ts"
+        "./projects/core/domain/src/public-api.ts",
+        "dist/core/domain"
       ],
       "@infrastructure/authorization": [
-        "dist/infrastructure/authorization",
-        "./projects/infrastructure/authorization/src/public-api.ts"
+        "./projects/infrastructure/authorization/src/public-api.ts",
+        "dist/infrastructure/authorization"
       ],
       "@infrastructure/base": [
-        "dist/infrastructure/base",
-        "./projects/infrastructure/base/src/public-api.ts"
+        "./projects/infrastructure/base/src/public-api.ts",
+        "dist/infrastructure/base"
       ],
       "@view/base": [
-        "dist/view/base",
-        "./projects/view/base/src/public-api.ts"
+        "./projects/view/base/src/public-api.ts",
+        "dist/view/base"
       ],
       "@view/features": [
-        "dist/view/features",
-        "./projects/view/features/src/public-api.ts"
+        "./projects/view/features/src/public-api.ts",
+        "dist/view/features"
       ],
       "@view/widgets": [
-        "dist/view/widgets",
-        "./projects/view/widgets/src/public-api.ts"
+        "./projects/view/widgets/src/public-api.ts",
+        "dist/view/widgets"
       ]
     }
   },

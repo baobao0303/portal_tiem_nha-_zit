@@ -1,184 +1,264 @@
-<div class="space-y-8">
+<div class="animate-in fade-in duration-1000">
+  
   <!-- Header Section -->
-  <div class="flex flex-col gap-1">
-    <h2 class="text-3xl font-headline font-extrabold tracking-tight text-on-surface">Category Management</h2>
-    <p class="text-on-surface-variant font-body">Organize and curate your digital atelier’s product collections.</p>
-  </div>
+  <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="animate-in slide-in-from-left-4 duration-700">
+      <h2 class="text-4xl font-display text-foreground tracking-tight leading-none">Category <span class="italic text-accent">Taxonomy</span></h2>
+      <p class="text-muted-foreground mt-3 text-sm font-medium tracking-wide uppercase opacity-70">Organize and curate your digital atelier's product collections.</p>
+    </div>
+  </header>
   
   <!-- Bento Stats -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-    <div class="bg-surface-container-lowest p-6 rounded-xl border-none shadow-sm hover:shadow-md transition-shadow">
-      <div class="flex items-center justify-between mb-4">
-        <span class="material-symbols-outlined text-primary p-2 bg-primary-fixed-dim/20 rounded-lg" data-icon="category">category</span>
-        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">+4 this month</span>
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+    <div class="group relative bg-white/90 backdrop-blur-xl p-6 rounded-[2rem] border border-primary/10 shadow-dashboard flex flex-col justify-between transition-all duration-500 hover:translate-y-[-0.25rem] overflow-hidden">
+      <div class="absolute -right-8 -top-8 w-24 h-24 bg-primary/5 rounded-full blur-2xl transition-all duration-700 group-hover:scale-150"></div>
+      <div class="flex justify-between items-start mb-6 relative z-10">
+        <div class="p-3 bg-primary/10 rounded-2xl text-primary transition-transform group-hover:rotate-12">
+          <lucide-icon name="boxes" class="h-5 w-5"></lucide-icon>
+        </div>
+        <div class="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-[0.5625rem] font-black uppercase tracking-widest ring-1 ring-emerald-500/20">Live</div>
       </div>
-      <p class="text-sm text-on-surface-variant font-medium">Total Categories</p>
-      <p class="text-2xl font-headline font-bold text-on-surface">24</p>
+      <div class="relative z-10">
+        <p class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1.5 opacity-60 font-body">Total Categories</p>
+        <h3 class="text-3xl font-body font-bold text-foreground tracking-tight">{{totalCategories()}}</h3>
+      </div>
     </div>
     
-    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
-      <div class="flex items-center justify-between mb-4">
-        <span class="material-symbols-outlined text-secondary p-2 bg-secondary-fixed/30 rounded-lg" data-icon="collections">collections</span>
+    <div class="group relative bg-white/90 backdrop-blur-xl p-6 rounded-[2rem] border border-primary/10 shadow-dashboard flex flex-col justify-between transition-all duration-500 hover:translate-y-[-0.25rem] overflow-hidden">
+      <div class="absolute -right-8 -top-8 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl transition-all duration-700 group-hover:scale-150"></div>
+      <div class="flex justify-between items-start mb-6 relative z-10">
+        <div class="p-3 bg-emerald-500/10 rounded-2xl text-emerald-500 transition-transform group-hover:rotate-12">
+          <lucide-icon name="activity" class="h-5 w-5"></lucide-icon>
+        </div>
       </div>
-      <p class="text-sm text-on-surface-variant font-medium">Active Collections</p>
-      <p class="text-2xl font-headline font-bold text-on-surface">18</p>
+      <div class="relative z-10">
+        <p class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1.5 opacity-60 font-body">Active Status</p>
+        <h3 class="text-3xl font-body font-bold text-foreground tracking-tight">{{ activeCount() }}</h3>
+      </div>
     </div>
     
-    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
-      <div class="flex items-center justify-between mb-4">
-        <span class="material-symbols-outlined text-tertiary p-2 bg-tertiary-fixed/30 rounded-lg" data-icon="inventory_2">inventory_2</span>
+    <div class="group relative bg-white/90 backdrop-blur-xl p-6 rounded-[2rem] border border-primary/10 shadow-dashboard flex flex-col justify-between transition-all duration-500 hover:translate-y-[-0.25rem] overflow-hidden">
+      <div class="absolute -right-8 -top-8 w-24 h-24 bg-rose-500/5 rounded-full blur-2xl transition-all duration-700 group-hover:scale-150"></div>
+      <div class="flex justify-between items-start mb-6 relative z-10">
+        <div class="p-3 bg-rose-500/10 rounded-2xl text-rose-500 transition-transform group-hover:rotate-12">
+          <lucide-icon name="archive" class="h-5 w-5"></lucide-icon>
+        </div>
       </div>
-      <p class="text-sm text-on-surface-variant font-medium">Avg. Products/Cat</p>
-      <p class="text-2xl font-headline font-bold text-on-surface">42</p>
+      <div class="relative z-10">
+        <p class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1.5 opacity-60 font-body">Inactive</p>
+        <h3 class="text-3xl font-body font-bold text-foreground tracking-tight">{{ inactiveCount() }}</h3>
+      </div>
     </div>
     
-    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-none">
-      <div class="flex items-center justify-between mb-4">
-        <span class="material-symbols-outlined text-emerald-700 p-2 bg-emerald-100 rounded-lg" data-icon="visibility">visibility</span>
+    <div class="group relative bg-white/90 backdrop-blur-xl p-6 rounded-[2rem] border border-primary/10 shadow-dashboard flex flex-col justify-between transition-all duration-500 hover:translate-y-[-0.25rem] overflow-hidden">
+      <div class="absolute -right-8 -top-8 w-24 h-24 bg-accent/5 rounded-full blur-2xl transition-all duration-700 group-hover:scale-150"></div>
+      <div class="flex justify-between items-start mb-6 relative z-10">
+        <div class="p-3 bg-accent/10 rounded-2xl text-accent transition-transform group-hover:rotate-12">
+          <lucide-icon name="edit" class="h-5 w-5"></lucide-icon>
+        </div>
       </div>
-      <p class="text-sm text-on-surface-variant font-medium">Top Category View</p>
-      <p class="text-2xl font-headline font-bold text-on-surface">Ceramics</p>
+      <div class="relative z-10">
+        <p class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1.5 opacity-60 font-body">Operation Mode</p>
+        <h3 class="text-3xl font-body font-bold tracking-tight mt-1" [ngClass]="isEditing ? 'text-accent' : 'text-primary'">
+          {{ isEditing ? 'Editing' : 'Creating' }}
+        </h3>
+      </div>
     </div>
   </div>
   
   <!-- Main Split Layout -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start pb-10">
     <!-- Category Table (2/3) -->
-    <div class="lg:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
-      <div class="p-6 border-b border-surface-variant flex items-center justify-between">
-        <h3 class="font-headline font-bold text-lg">Existing Categories</h3>
+    <div class="xl:col-span-2 bg-white/90 backdrop-blur-xl rounded-[2.5rem] border border-primary/10 shadow-dashboard overflow-hidden group/container">
+      <div class="px-8 py-6 border-b border-primary/5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <lucide-icon name="layers" class="h-4 w-4 text-accent"></lucide-icon>
+          <h3 class="font-bold font-body text-lg text-foreground">Existing Categories</h3>
+        </div>
         <div class="flex gap-2">
-          <button class="p-2 hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer">
-            <span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+          <button class="p-2.5 hover:bg-white/60 rounded-xl transition-all cursor-pointer text-muted-foreground border border-primary/5 hover:text-accent">
+            <lucide-icon name="list" class="h-4 w-4"></lucide-icon>
           </button>
-          <button class="p-2 hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer">
-            <span class="material-symbols-outlined text-sm" data-icon="sort">sort</span>
+          <button (click)="loadCategories()" [disabled]="isLoading()" class="p-2.5 hover:bg-white/60 rounded-xl transition-all cursor-pointer disabled:opacity-50 text-muted-foreground border border-primary/5 hover:text-accent group/refresh" title="Refresh">
+            <lucide-icon name="refresh-cw" class="h-4 w-4 transition-transform group-hover/refresh:rotate-180 duration-700" [class.animate-spin]="isLoading()"></lucide-icon>
           </button>
         </div>
       </div>
       
-      <div class="overflow-x-auto">
-        <table class="w-full text-left">
-          <thead>
-            <tr class="bg-surface-container-low/50">
-              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Category</th>
-              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Slug/SKU</th>
-              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Status</th>
-              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Products</th>
-              <th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+      <div class="overflow-x-auto relative">
+        @if (isLoading() && categories().length > 0) {
+          <div class="absolute inset-0 z-10 bg-white/60 backdrop-blur-sm flex justify-center items-center">
+            <div class="flex items-center gap-3 px-6 py-3 bg-white/90 rounded-2xl border border-primary/10 text-foreground font-bold text-sm shadow-xl">
+              <div class="w-5 h-5 border-2 border-accent/30 border-t-accent rounded-full animate-spin"></div>
+              Updating records...
+            </div>
+          </div>
+        }
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-white/40">
+            <tr>
+              <th class="px-8 py-5 text-[0.625rem] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 whitespace-nowrap">Category</th>
+              <th class="px-8 py-5 text-[0.625rem] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 whitespace-nowrap">Identifier</th>
+              <th class="px-8 py-5 text-[0.625rem] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 whitespace-nowrap">Status</th>
+              <th class="px-8 py-5 text-[0.625rem] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 text-right whitespace-nowrap">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-surface-container-low">
-            <!-- Row 1 -->
-            <tr class="hover:bg-surface-container-low/30 transition-colors">
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden">
-                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9bVvhosLQuqPRZna39WX5ZD2g65U3JrrbdW7SSrUMUYVlEh60fFTYeWrdUHtx4NYI0RTDiypSHqCCGhFY3MlXYSCFUqP-iLNjIC1Pa7SbQPVz7o8Veku4-48MnlTCAJtUQsc2ab-4Q9TBtwza0aDvsC09Fv_McZzmFStWKZIV2PBzvvfmFbPC9gmXE7ES4D7FiKpmDoftNWs7OU1uWLZkQ5PNx1zqQKFrHK4DIF194EXr6Vuav813tcxDU1bRnxXb4cgyjYQ9WXV8"/>
+          <tbody class="divide-y divide-primary/5">
+            @for (cat of categories(); track cat.id) {
+            <tr class="hover:bg-white/60 transition-all duration-300 group/row" [ngClass]="{'bg-accent/5': editingId() === cat.id}">
+              <td class="px-8 py-6 whitespace-nowrap">
+                <div class="flex items-center gap-5">
+                  <div class="w-14 h-14 rounded-2xl bg-white/50 border border-primary/10 overflow-hidden flex items-center justify-center shrink-0 shadow-sm relative group-hover/row:scale-105 transition-transform duration-500">
+                    @if (cat.imageUrl) {
+                      <img class="w-full h-full object-cover" [src]="cat.imageUrl"/>
+                    } @else {
+                      <lucide-icon name="image" class="h-5 w-5 text-muted-foreground/30"></lucide-icon>
+                    }
                   </div>
                   <div>
-                    <div class="font-bold text-on-surface text-sm">Ceramic Art</div>
-                    <div class="text-xs text-on-surface-variant">Interior Decor</div>
+                    <div class="font-bold text-sm text-foreground tracking-tight">{{cat.name}}</div>
+                    <div class="text-[0.625rem] font-bold text-muted-foreground mt-1 tracking-widest uppercase opacity-60 truncate max-w-[12.5rem]">{{cat.description || 'Null'}}</div>
                   </div>
                 </div>
               </td>
-              <td class="px-6 py-4 text-sm font-medium text-on-surface-variant">CERM-01</td>
-              <td class="px-6 py-4">
-                <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-bold bg-primary-fixed/20 text-primary">
-                  <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>Active
-                </span>
+              <td class="px-8 py-6 text-[0.8125rem] font-mono text-muted-foreground/80 tracking-tighter whitespace-nowrap">{{cat.slug}}</td>
+              <td class="px-8 py-6 whitespace-nowrap">
+                @if (cat.isActive) {
+                  <span class="inline-flex items-center gap-2 py-1.5 px-3 rounded-full text-[0.5625rem] font-bold bg-emerald-500/10 text-emerald-500 uppercase tracking-widest">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Active
+                  </span>
+                } @else {
+                  <span class="inline-flex items-center gap-2 py-1.5 px-3 rounded-full text-[0.5625rem] font-bold bg-primary/10 text-muted-foreground uppercase tracking-widest">
+                    <span class="w-1.5 h-1.5 rounded-full bg-muted-foreground"></span>Inactive
+                  </span>
+                }
               </td>
-              <td class="px-6 py-4 text-sm font-semibold text-on-surface">128</td>
-              <td class="px-6 py-4 text-right space-x-2">
-                <button class="text-slate-400 hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit</span></button>
-                <button class="text-slate-400 hover:text-error transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">delete</span></button>
-              </td>
-            </tr>
-            <!-- Row 2 -->
-            <tr class="hover:bg-surface-container-low/30 transition-colors">
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden">
-                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1UlZ5qjsXxSJiT96_3PQOI1MSctQqCUUIiozCcca6Ax0L4P_YgRvQiXs8onWim9ng1BldvknVqnncXDQM7nfLIo5q8ZAxTTy6rf__32E5owECIUlqpelp-UwS1Nz9bnsJUKmJ7UPs80C8yHJ6gpz8Da8nwwYGjKTgPhCHza9UG9uo4kFUrLOhuu9S_vZVkiynB8BDmX6VLiYpSJQ0oh8ZW5cA1jBwWLRo5nyZiRPiuqC8g9pHgjzxQF9AMniV3VJUhK6XW62Hrron"/>
-                  </div>
-                  <div>
-                    <div class="font-bold text-on-surface text-sm">Fine Fragrance</div>
-                    <div class="text-xs text-on-surface-variant">Home Scenting</div>
-                  </div>
+              <td class="px-8 py-6 text-right whitespace-nowrap">
+                <div class="flex items-center justify-end gap-2 transition-all duration-300">
+                  <button (click)="onEdit(cat)" class="p-2.5 rounded-xl text-muted-foreground border border-primary/5 hover:text-accent hover:bg-accent/10 transition-all cursor-pointer" title="Edit">
+                    <lucide-icon name="edit" class="h-4 w-4"></lucide-icon>
+                  </button>
+                  <button (click)="onDelete(cat)" class="p-2.5 rounded-xl text-muted-foreground border border-primary/5 hover:text-rose-500 hover:bg-rose-500/10 transition-all cursor-pointer" title="Delete">
+                    <lucide-icon name="trash-2" class="h-4 w-4"></lucide-icon>
+                  </button>
                 </div>
               </td>
-              <td class="px-6 py-4 text-sm font-medium text-on-surface-variant">FRAG-04</td>
-              <td class="px-6 py-4">
-                <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-bold bg-primary-fixed/20 text-primary">
-                  <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>Active
-                </span>
-              </td>
-              <td class="px-6 py-4 text-sm font-semibold text-on-surface">56</td>
-              <td class="px-6 py-4 text-right space-x-2">
-                <button class="text-slate-400 hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit</span></button>
-                <button class="text-slate-400 hover:text-error transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">delete</span></button>
-              </td>
             </tr>
-            <!-- Row 3 -->
-            <tr class="hover:bg-surface-container-low/30 transition-colors">
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden">
-                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoCilNa5lLu31k50FKltl3wMQutSNaGrRg9-MOpFV0Lc0Zv3H3ZAXIBgi_W_lPas6e6IA87X0u5izKjYy_M5hTwSPvRa1XTf-GkpbLiVuxwbiHEgvACarpQUpz7w6Z1zIuiFD-TOh9efMW2AGh_T4H8kYzbg441xgYq3AAlV8jRqaHDwhBlYUOvVTyB2fukd6EK14Ef5kgx97WYPpcMDP-R0uqEvpbj2hDokWU2lfIzarbSqojH2Nelah_43DNdWFbsVHICQV1LNek"/>
-                  </div>
-                  <div>
-                    <div class="font-bold text-on-surface text-sm">Artisan Wood</div>
-                    <div class="text-xs text-on-surface-variant">Bespoke Furniture</div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 text-sm font-medium text-on-surface-variant">WOOD-02</td>
-              <td class="px-6 py-4">
-                <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-bold bg-surface-container-highest text-on-surface-variant">
-                  <span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>Inactive
-                </span>
-              </td>
-              <td class="px-6 py-4 text-sm font-semibold text-on-surface">14</td>
-              <td class="px-6 py-4 text-right space-x-2">
-                <button class="text-slate-400 hover:text-primary transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">edit</span></button>
-                <button class="text-slate-400 hover:text-error transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px]">delete</span></button>
-              </td>
-            </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="px-8 py-20 text-center text-muted-foreground text-sm font-medium italic">
+                  @if (isLoading()) {
+                    <div class="flex flex-col items-center justify-center gap-4">
+                      <div class="w-10 h-10 border-2 border-accent/20 border-t-accent rounded-full animate-spin"></div>
+                      <span class="text-xs uppercase tracking-widest font-bold">Synchronizing...</span>
+                    </div>
+                  } @else {
+                    The taxonomy archive is empty. Begin by creating a new category module.
+                  }
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
     </div>
     
-    <!-- Add New Category Form (1/3) -->
-    <div class="lg:col-span-1 bg-surface-container-low p-8 rounded-xl space-y-6">
-      <h3 class="font-headline font-bold text-lg text-emerald-900">Add New Category</h3>
-      <form class="space-y-5">
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider font-label">Category Name</label>
-          <input class="w-full bg-surface-container-highest border-none rounded-lg py-3 px-4 focus:ring-0 focus:border-2 focus:border-primary text-sm font-body outline-none" placeholder="e.g. Handmade Textiles" type="text"/>
-        </div>
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider font-label">Category Image</label>
-          <div class="w-full h-40 border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center bg-surface hover:bg-surface-container-lowest transition-colors group cursor-pointer">
-            <span class="material-symbols-outlined text-[32px] text-slate-300 group-hover:text-primary transition-colors mb-2">upload_file</span>
-            <p class="text-xs text-on-surface-variant font-medium">Click to upload image</p>
-            <p class="text-[10px] text-slate-400 mt-1">Recommended size: 800x800px</p>
+    <!-- Form Panel (1/3) -->
+    <div class="xl:col-span-1 space-y-6 category-form-panel">
+      <!-- Edit Mode Banner -->
+      @if (isEditing) {
+        <div class="bg-accent/10 border border-accent/20 rounded-[1.5rem] p-5 flex items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-500">
+          <div class="flex items-center gap-4">
+            <div class="p-2.5 bg-accent/20 rounded-xl text-accent">
+              <lucide-icon name="edit" class="h-4 w-4"></lucide-icon>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-foreground">Edit Mode Active</p>
+              <p class="text-[0.625rem] font-bold uppercase tracking-widest text-accent mt-0.5">Modifying Selection</p>
+            </div>
           </div>
+          <button (click)="onCancelEdit()" class="p-2.5 rounded-xl hover:bg-white/50 text-muted-foreground transition-all cursor-pointer border border-primary/5" title="Cancel edit">
+            <lucide-icon name="x" class="h-4 w-4"></lucide-icon>
+          </button>
         </div>
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider font-label">Description</label>
-          <textarea class="w-full bg-surface-container-highest border-none rounded-lg py-3 px-4 focus:ring-0 focus:border-2 focus:border-primary text-sm font-body outline-none resize-none" placeholder="Describe the essence of this collection..." rows="4"></textarea>
-        </div>
+      }
+      
+      <div class="bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] shadow-dashboard border border-primary/10">
+        <h3 class="font-display font-medium text-2xl tracking-tight mb-2" [ngClass]="isEditing ? 'text-accent' : 'text-primary'">
+          {{ isEditing ? 'Modify Category' : 'Provision Module' }}
+        </h3>
+        <p class="text-xs text-muted-foreground font-medium mb-8">Define structural taxonomy requirements for product classification.</p>
         
-        <div class="flex items-center gap-3 pt-4">
-          <button class="flex-1 bg-gradient-to-br from-primary to-primary-container text-on-primary py-3 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all cursor-pointer box-shadow-sm" type="submit">
-            Create Collection
-          </button>
-          <button class="px-5 py-3 text-on-surface-variant hover:text-on-surface font-headline font-bold text-sm transition-colors cursor-pointer" type="button">
-            Clear
-          </button>
-        </div>
-      </form>
+        <form class="space-y-6" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+          <div class="space-y-2">
+            <label class="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] ml-1">Module Name <span class="text-rose-500">*</span></label>
+            <input formControlName="name" class="w-full bg-white/60 border border-primary/10 rounded-xl py-3 px-4 focus:ring-2 focus:ring-accent/20 focus:border-accent text-sm font-body outline-none transition-all placeholder:text-muted-foreground/30 font-medium" placeholder="E.g., High-end Diapers" type="text"/>
+          </div>
+          
+          <div class="space-y-2">
+            <label class="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] ml-1">Thumbnail Identity</label>
+            <div class="p-4 bg-white/60 border border-primary/10 rounded-xl">
+              <div class="flex items-center gap-5">
+                <div class="w-16 h-16 rounded-[1rem] bg-white border border-primary/10 flex items-center justify-center overflow-hidden shrink-0 shadow-sm relative group">
+                  @if (categoryForm.get('imageUrl')?.value) {
+                    <img [src]="categoryForm.get('imageUrl')?.value" class="w-full h-full object-cover" />
+                  } @else {
+                    <lucide-icon name="image" class="h-5 w-5 text-muted-foreground/20"></lucide-icon>
+                  }
+                  <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+                <div class="flex-1 space-y-3">
+                  <label class="relative w-full flex items-center justify-center gap-2 py-3 px-4 bg-white border border-primary/10 hover:border-accent/30 hover:bg-accent/5 rounded-xl text-xs font-bold cursor-pointer transition-all disabled:opacity-50 text-foreground group/btn">
+                    <lucide-icon [name]="isUploading() ? 'refresh-cw' : 'download'" [class]="'h-3.5 w-3.5 transition-transform ' + (isUploading() ? 'animate-spin text-accent' : 'rotate-180 group-hover/btn:-translate-y-0.5 text-muted-foreground')"></lucide-icon>
+                    {{ isUploading() ? 'Transmitting Data...' : 'Upload File' }}
+                    <input type="file" class="hidden" accept="image/*" (change)="onFileSelected($event)" [disabled]="isUploading()" />
+                  </label>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-t border-primary/5">
+                <input formControlName="imageUrl" class="w-full bg-white border border-primary/5 rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-accent/20 focus:border-accent text-[0.6875rem] font-mono tracking-tight outline-none transition-all placeholder:text-muted-foreground/30" placeholder="Alternately append URL reference directly..." type="text"/>
+              </div>
+            </div>
+          </div>
+          
+          <div class="space-y-2">
+            <label class="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-[0.2em] ml-1">Description Metadata</label>
+            <textarea formControlName="description" class="w-full bg-white/60 border border-primary/10 rounded-xl py-3 px-4 focus:ring-2 focus:ring-accent/20 focus:border-accent text-sm font-body font-medium outline-none resize-none transition-all placeholder:text-muted-foreground/30" placeholder="Articulate the purpose of this categorization..." rows="3"></textarea>
+          </div>
+          
+          @if (isEditing) {
+            <label class="flex items-center justify-between p-4 rounded-xl border border-primary/10 bg-white/60 cursor-pointer group">
+              <div>
+                <p class="text-xs font-bold text-foreground">Operational Status</p>
+                <p class="text-[0.625rem] text-muted-foreground mt-0.5 font-medium">Toggle module visibility</p>
+              </div>
+              <div class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" formControlName="isActive" class="sr-only peer" />
+                <div class="w-11 h-6 bg-primary/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0.125rem] after:left-[0.125rem] after:bg-white after:border-white/10 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent shadow-sm"></div>
+              </div>
+            </label>
+          }
+          
+          <div class="pt-6 border-t border-primary/10 flex items-center gap-3">
+            <button 
+              [disabled]="categoryForm.invalid || isLoading()" 
+              class="flex-1 h-12 rounded-xl text-xs font-bold text-white transition-all shadow-lg active:scale-95 disabled:pointer-events-none disabled:opacity-50 flex items-center justify-center gap-2"
+              [ngClass]="isEditing ? 'bg-accent shadow-accent/20 hover:bg-accent/90' : 'bg-primary shadow-primary/20 hover:bg-primary/90'"
+              type="submit">
+              @if (isLoading()) {
+                <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Commit Processing...
+              } @else {
+                <lucide-icon [name]="isEditing ? 'refresh-cw' : 'plus'" class="h-4 w-4"></lucide-icon>
+                {{ isEditing ? 'Implement Revisions' : 'Initialize Module' }}
+              }
+            </button>
+            <button (click)="onClear()" class="w-20 h-12 rounded-xl text-xs font-bold text-muted-foreground bg-white border border-primary/10 hover:bg-white/60 hover:text-foreground transition-all cursor-pointer flex items-center justify-center" type="button" [disabled]="isLoading()" title="Reset Context">
+              <lucide-icon name="x" class="h-4 w-4"></lucide-icon>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

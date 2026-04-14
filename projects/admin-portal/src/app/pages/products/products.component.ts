@@ -1,268 +1,155 @@
-import { Component, inject, signal, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
-import { ProductReadableRepository } from '@infrastructure/base';
-import { CreateProductCommandHandler } from '@application/commands';
-import { CreateProductRequest } from '@application/messages';
-import { CurrencyPipe, SlicePipe, UpperCasePipe } from '@angular/common';
-
-import { ZardInputDirective } from '@/shared/components/input';
-import { ZardSelectComponent } from '@/shared/components/select/select.component';
-import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { toast } from 'ngx-sonner';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    CurrencyPipe,
-    SlicePipe,
-    UpperCasePipe,
-    ZardInputDirective,
-    ZardSelectComponent
-  ],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LucideAngularModule],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })
 export class ProductsComponent implements OnInit {
-  private readableRepo = inject(ProductReadableRepository);
-  private createHandler = inject(CreateProductCommandHandler);
-  private sheetService = inject(ZardSheetService);
-
-  @ViewChild('drawerTemplate') drawerTemplate!: TemplateRef<any>;
-  @ViewChild('fileInputForm') fileInputForm!: ElementRef<HTMLInputElement>;
-  private sheetRef: any;
+  private _http = inject(HttpClient);
+  private _router = inject(Router);
 
   products = signal<any[]>([]);
   isLoading = signal(false);
-  isSubmitting = signal(false);
-  isUploading = signal(false);
-  uploadedMedia = signal<{type: string, url: string, public_id?: string}[]>([]);
-  isSaved = false;
+  totalProducts = signal(0);
+  activeCount = signal(0);
+  lowStockCount = signal(0);
 
-  productForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    short_description: new FormControl(''),
-    description: new FormControl(''),
-    price: new FormControl('', [Validators.required, Validators.min(0)]),
-    compare_at_price: new FormControl('', [Validators.min(0)]),
-    currency: new FormControl('VND', [Validators.required]),
-    sku: new FormControl('', [Validators.required]),
-    gtin: new FormControl(''),
-    status: new FormControl('active'),
-    condition: new FormControl('new'),
-    categoryId: new FormControl(''),
-    stock_quantity: new FormControl('10', [Validators.min(0)]),
-    stock_track: new FormControl(true),
-    share_facebook: new FormControl(false)
-  });
+  // Pagination
+  currentPage = signal(1);
+  pageSize = 10;
+  totalPages = signal(0);
 
-  statusOptions = [
-    { label: 'Active', value: 'active' },
-    { label: 'Draft', value: 'draft' }
-  ];
+  // Filters
+  searchQuery = signal('');
+  selectedStatus = signal('');
 
-  categoryOptions = [
-    { label: 'All Collections', value: '' },
-    { label: 'Ceramics', value: 'ceramics' },
-    { label: 'Textiles', value: 'textiles' },
-    { label: 'Furniture', value: 'furniture' }
-  ];
-
-  stockFilterOptions = [
-    { label: 'All Status', value: '' },
-    { label: 'In Stock', value: 'in_stock' },
-    { label: 'Low Stock', value: 'low_stock' },
-    { label: 'Out of Stock', value: 'out_of_stock' }
-  ];
+  // Confirm delete
+  deletingId = signal<string | null>(null);
 
   ngOnInit() {
     this.loadProducts();
   }
 
-  loadProducts() {
+  async loadProducts() {
     this.isLoading.set(true);
-    this.readableRepo.listProducts({ page: 1, limit: 50 }).subscribe({
-      next: (res) => {
-        this.products.set(res.items || []);
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        console.error('Failed to load products', err);
-        toast.error('Lỗi', { description: 'Failed to load products' });
-        this.isLoading.set(false);
-      }
-    });
-  }
-
-  openDrawer() {
-    this.productForm.reset({
-      currency: 'VND',
-      status: 'active',
-      condition: 'new',
-      stock_quantity: '10',
-      stock_track: true,
-      share_facebook: false
-    });
-    this.isSaved = false;
-    this.uploadedMedia.set([]);
-    this.sheetRef = this.sheetService.create({
-      zContent: this.drawerTemplate,
-      zSide: 'right',
-      zTitle: 'Thêm Sản Phẩm Mới',
-      zDescription: 'Nhập thông tin sản phẩm đầy đủ',
-      zHideFooter: true,
-      zWidth: '550px',
-      zCustomClasses: 'h-full'
-    });
-  }
-
-  closeDrawer() {
-    if (!this.isSaved && this.uploadedMedia().length > 0) {
-      this.cleanupTempMedia();
-    }
-    if (this.sheetRef) {
-      this.sheetRef.close();
-    }
-  }
-
-  async cleanupTempMedia() {
-    const media = this.uploadedMedia();
-    for (const m of media) {
-      if (m.public_id) {
-        try {
-          await fetch(`/api/upload?public_id=${encodeURIComponent(m.public_id)}`, { method: 'DELETE' });
-        } catch (e) {
-          console.error('Failed to cleanup temp media', e);
-        }
-      }
-    }
-    this.uploadedMedia.set([]);
-  }
-
-  // --- Drag and Drop File Handlers ---
-  triggerFileInput() {
-    this.fileInputForm.nativeElement.click();
-  }
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.uploadFile(input.files[0]);
-    }
-  }
-
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
-      this.uploadFile(event.dataTransfer.files[0]);
-    }
-  }
-
-  async uploadFile(file: File) {
-    this.isUploading.set(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('folder', 'temp');
-
     try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await response.json();
-      if (data.success) {
-        this.uploadedMedia.update(media => [
-          ...media, 
-          { type: 'image', url: data.data.secure_url, public_id: data.data.public_id }
-        ]);
-        toast.success('Đã tải ảnh lên');
-      } else {
-        toast.error('Lỗi Server', { description: data.message });
+      const body: any = {
+        page_index: this.currentPage(),
+        page_size: this.pageSize,
+      };
+      if (this.searchQuery()) body.search = this.searchQuery();
+      if (this.selectedStatus()) body.status = this.selectedStatus();
+
+      const res: any = await firstValueFrom(this._http.post('/api/products/search', body));
+      const payload = res?.data ?? res;
+
+      const dataArray = Array.isArray(payload?.data) ? payload.data : [];
+      this.products.set(dataArray);
+      this.totalProducts.set(payload?.total ?? 0);
+      this.activeCount.set(payload?.activeCount ?? 0);
+      this.lowStockCount.set(payload?.lowStockCount ?? 0);
+      this.totalPages.set(Math.ceil((payload?.total ?? 0) / this.pageSize));
+
+      if (dataArray.length === 0) {
+        toast.info('No Data', { description: 'No products found matching your criteria.' });
       }
     } catch (e) {
       console.error(e);
-      toast.error('Lỗi mạng', { description: 'Không thể kết nối đến server tải ảnh' });
+      toast.error('Load Failed', { description: 'Could not fetch products.' });
     } finally {
-      this.isUploading.set(false);
+      this.isLoading.set(false);
     }
   }
 
-  async removeMedia(index: number) {
-    const mediaList = this.uploadedMedia();
-    const target = mediaList[index];
-    if (target && target.public_id) {
+  onSearch(value: string) {
+    this.searchQuery.set(value);
+    this.currentPage.set(1);
+    this.loadProducts();
+  }
+
+  onStatusFilter(value: string) {
+    this.selectedStatus.set(value);
+    this.currentPage.set(1);
+    this.loadProducts();
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
+    this.loadProducts();
+  }
+
+  getPageNumbers(): number[] {
+    const total = this.totalPages();
+    const cur = this.currentPage();
+    const pages: number[] = [];
+    for (let i = Math.max(1, cur - 1); i <= Math.min(total, cur + 1); i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  async onDelete(product: any) {
+    if (this.deletingId() === product.id) {
+      this.deletingId.set(null);
       try {
-        await fetch(`/api/upload?public_id=${encodeURIComponent(target.public_id)}`, { method: 'DELETE' });
+        const res: any = await firstValueFrom(this._http.delete(`/api/products/${product.id}`));
+        if (res?.success) {
+          toast.success('Product Deleted', { description: `"${product.name}" has been removed.` });
+          await this.loadProducts();
+        } else {
+          toast.error('Delete Failed');
+        }
       } catch (e) {
-        console.error('Delete failed:', e);
+        toast.error('Error', { description: 'Could not delete product.' });
       }
+    } else {
+      this.deletingId.set(product.id);
+      // Auto-cancel confirm after 3s
+      setTimeout(() => {
+        if (this.deletingId() === product.id) this.deletingId.set(null);
+      }, 3000);
     }
-    this.uploadedMedia.update(m => m.filter((_, i) => i !== index));
   }
 
-  // --- Submission ---
-  onSubmit() {
-    if (this.productForm.invalid) {
-      this.productForm.markAllAsTouched();
-      toast.error('Vui lòng kiểm tra lại', { description: 'Một số trường bắt buộc chưa hợp lệ' });
-      return;
-    }
+  goToDetail(id: string) {
+    this._router.navigate(['/products', id]);
+  }
 
-    this.isSubmitting.set(true);
-    const formVal = this.productForm.value;
-    
-    const req = new CreateProductRequest();
-    req.name = formVal.name!;
-    req.description = formVal.description || '';
-    req.short_description = formVal.short_description || '';
-    
-    req.media = this.uploadedMedia();
-    req.categories = formVal.categoryId ? [formVal.categoryId] : [];
-    req.gtin = formVal.gtin || undefined;
-    req.price = Number(formVal.price);
-    req.compare_at_price = formVal.compare_at_price ? Number(formVal.compare_at_price) : undefined;
-    req.currency = formVal.currency!;
-    
-    req.stock = {
-      quantity: Number(formVal.stock_quantity),
-      track_inventory: formVal.stock_track || false
-    };
-    
-    // We omitted tracking arrays of bulk_pricing and shipping to keep the form simple for now
-    
-    req.condition = formVal.condition || 'new';
-    
-    req.social = {
-      share_facebook: formVal.share_facebook || false
-    };
-    
-    req.sku = formVal.sku!;
-    req.status = formVal.status!;
+  minVal(a: number, b: number): number {
+    return Math.min(a, b);
+  }
 
-    this.createHandler.handle(req).subscribe({
-      next: (response) => {
-        this.isSubmitting.set(false);
-        if (response && response.product) {
-          toast.success('Thành công', { description: 'Đã lưu sản phẩm vào hệ thống.' });
-          this.isSaved = true;
-          this.closeDrawer();
-          this.loadProducts();
-        } else {
-          toast.error('Lỗi Database', { description: 'Không thể thêm sản phẩm, vui lòng thử lại.' });
-        }
-      },
-      error: (err) => {
-        this.isSubmitting.set(false);
-        toast.error('Lỗi', { description: 'Có lỗi xảy ra: ' + err });
-      }
-    });
+  formatPrice(price: number, currency: string): string {
+    const curr = currency || 'USD';
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: curr }).format(price);
+  }
+  getStockBadge(p: any): { text: string; cls: string } {
+    const qty = p.stock?.quantity ?? p.stockQuantity ?? 0;
+    if (qty <= 0)  return { text: 'Out of Stock', cls: 'bg-red-50 text-red-700' };
+    if (qty <= 5)  return { text: 'Low Stock',    cls: 'bg-amber-50 text-amber-700' };
+    return           { text: 'In Stock',       cls: 'bg-primary/10 text-primary' };
+  }
+
+  getStockDot(p: any): string {
+    const qty = p.stock?.quantity ?? p.stockQuantity ?? 0;
+    if (qty <= 0) return 'bg-red-500';
+    if (qty <= 5) return 'bg-amber-500';
+    return 'bg-primary';
+  }
+
+  getThumbnail(product: any): string | null {
+    return product.thumbnail
+      ?? (Array.isArray(product.media) && product.media.length > 0 ? product.media[0].url : null);
   }
 }

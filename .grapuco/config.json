@@ -1,0 +1,23 @@
+{
+  "repoId": "16cfd8cd-1f7c-4a56-9e51-3ad0d38dd9df",
+  "repoName": "handmade-shop-portal",
+  "server": "https://api.grapuco.com",
+  "language": "python",
+  "framework": "angular",
+  "features": {
+    "embeddings": true,
+    "dataFlowAnalysis": true
+  },
+  "ignore": [
+    "node_modules",
+    "dist",
+    ".next",
+    ".git",
+    ".grapuco",
+    "__pycache__",
+    "vendor",
+    "target",
+    "build"
+  ],
+  "lastPush": "2026-04-14T05:10:31.478Z"
+}

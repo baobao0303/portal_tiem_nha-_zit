@@ -1,102 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@400;500;600&display=swap');
+@import "quill/dist/quill.snow.css";
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-outline-variant: #bec9c5;
-  --color-on-secondary-fixed: #001b3d;
-  --color-surface-dim: #d7dbd8;
-  --color-on-tertiary-container: #ffcebf;
-  --color-surface-variant: #e0e3e1;
-  --color-secondary-fixed-dim: #a9c7ff;
-  --color-on-tertiary: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-secondary-container: #64a1ff;
-  --color-on-error: #ffffff;
-  --color-on-tertiary-fixed: #390b00;
-  --color-primary: #005147;
-  --color-primary-fixed-dim: #83d5c5;
-  --color-on-primary-container: #95e8d8;
-  --color-tertiary-fixed: #ffdbd0;
-  --color-on-secondary-container: #003670;
-  --color-surface-container-highest: #e0e3e1;
-  --color-surface-container-low: #f1f4f2;
-  --color-surface-container-high: #e5e9e6;
-  --color-inverse-surface: #2d3130;
-  --color-background: #f7faf8;
-  --color-tertiary-fixed-dim: #ffb59e;
-  --color-on-surface-variant: #3e4946;
-  --color-on-primary-fixed: #00201b;
-  --color-surface-tint: #006b5e;
-  --color-on-primary: #ffffff;
-  --color-on-secondary: #ffffff;
-  --color-on-tertiary-fixed-variant: #723521;
-  --color-surface-container-lowest: #ffffff;
-  --color-primary-container: #006b5e;
-  --color-error: #ba1a1a;
-  --color-surface: #f7faf8;
-  --color-inverse-on-surface: #eef1ef;
-  --color-secondary-fixed: #d6e3ff;
-  --color-surface-container: #ebefec;
-  --color-primary-fixed: #9ff2e1;
-  --color-tertiary-container: #8f4c36;
-  --color-secondary: #005db7;
-  --color-on-error-container: #93000a;
-  --color-on-primary-fixed-variant: #005046;
-  --color-surface-bright: #f7faf8;
-  --color-on-background: #181c1b;
-  --color-on-surface: #181c1b;
-  --color-outline: #6e7976;
-  --color-tertiary: #723521;
-  --color-inverse-primary: #83d5c5;
-  --color-on-secondary-fixed-variant: #00468c;
-
-  /* Zard UI (Shadcn) Component Mappings */
-  --color-background: var(--color-surface);
-  --color-foreground: var(--color-on-surface);
-  --color-primary: var(--color-primary);
-  --color-primary-foreground: var(--color-on-primary);
-  --color-card: var(--color-surface-container-lowest);
-  --color-card-foreground: var(--color-on-surface);
-  --color-popover: var(--color-surface-container-lowest);
-  --color-popover-foreground: var(--color-on-surface);
-  --color-secondary: var(--color-surface-container);
-  --color-secondary-foreground: var(--color-on-secondary-container);
-  --color-muted: var(--color-surface-container);
-  --color-muted-foreground: var(--color-outline);
-  --color-accent: var(--color-surface-container-high);
-  --color-accent-foreground: var(--color-on-surface);
-  --color-destructive: var(--color-error);
-  --color-destructive-foreground: var(--color-on-error);
-  --color-border: var(--color-surface-variant);
-  --color-input: var(--color-surface-variant);
-  --color-ring: var(--color-primary);
-
-  --border-radius-DEFAULT: 0.25rem;
-  --border-radius-lg: 0.5rem;
-  --border-radius-xl: 0.75rem;
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(210 14% 17%);
+  --color-primary: hsl(210 14% 17%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(0 0% 96%);
+  --color-secondary-foreground: hsl(0 0% 9%);
+  --color-muted: hsl(0 0% 96%);
+  --color-muted-foreground: hsl(184 5% 55%);
+  --color-accent: hsl(239 84% 67%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-border: hsl(0 0% 90%);
+  --color-ring: hsl(239 84% 67%);
   
   --radius: 0.5rem;
-  --radius-sm: calc(var(--radius) - 2px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: var(--border-radius-xl);
-
-  --font-headline: 'Manrope', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-label: 'Inter', sans-serif;
-  --font-brand: 'Pacifico', cursive;
+  
+  --font-display: 'Be Vietnam Pro', sans-serif;
+  --font-body: 'Be Vietnam Pro', sans-serif;
+  
+  --shadow-dashboard: 0 25px 80px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.06);
 }
+
+
 
 @layer base {
   body {
     font-family: var(--font-body);
-    @apply bg-surface text-on-surface;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    @apply bg-background text-foreground;
   }
   
-  h1, h2, h3, .font-headline {
-    font-family: var(--font-headline);
+  .font-headline {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
   }
 
   .material-symbols-outlined {
@@ -125,22 +72,78 @@
     display: flex;
     flex-direction: column;
   }
+  input::placeholder,
+  textarea::placeholder {
+    color: #615d59;
+    opacity: 0.8;
+  }
+
+  /* ── Type Scale ── */
+  .text-display {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.0625rem;
+  }
+  .text-title-lg {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.03125rem;
+  }
+  .text-title {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.015625rem;
+  }
+  .text-title-sm {
+    font-family: var(--font-headline);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .text-body-lg {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .text-body {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .text-label {
+    font-family: var(--font-label);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    line-height: 1.33;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .text-badge {
+    font-family: var(--font-label);
+    font-size: 0.625rem;
+    font-weight: 700;
+    line-height: 1.33;
+    letter-spacing: 0.1em;
+  }
 }
 
 @layer utilities {
   .bg-primary-gradient {
-    background: linear-gradient(135deg, #005147 0%, #006b5e 100%);
+    background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
   }
-  .bg-velvet-gradient {
-    background: linear-gradient(135deg, #005147 0%, #006b5e 100%);
+  .shadow-notion {
+    box-shadow: rgba(0,0,0,0.04) 0px 4px 18px, rgba(0,0,0,0.027) 0px 2.025px 7.84688px, rgba(0,0,0,0.02) 0px 0.8px 2.925px, rgba(0,0,0,0.01) 0px 0.175px 1.04062px;
   }
-  .emerald-gradient-btn {
-    background: linear-gradient(135deg, #84994F 0%, #006b5e 100%);
-  }
-  .subtle-emerald-bg {
-    background-color: #f7faf8;
-    background-image: radial-gradient(at 0% 0%, rgba(132, 153, 79, 0.05) 0px, transparent 50%), 
-                      radial-gradient(at 100% 100%, rgba(0, 107, 94, 0.05) 0px, transparent 50%);
+  .border-whisper {
+    border: 1px solid rgba(0,0,0,0.1);
   }
 }
 
@@ -155,4 +158,37 @@
 ::-webkit-scrollbar-track {
   border-radius: 5px;
   background: var(--color-surface-container);
+}
+
+/* ── Quill Editor Customization ── */
+.ql-toolbar.ql-snow {
+  border: none !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  padding: 12px 16px !important;
+  background-color: #fafafa;
+}
+
+.ql-container.ql-snow {
+  border: none !important;
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+}
+
+.ql-editor {
+  padding: 24px !important;
+  min-height: 200px;
+  color: var(--color-foreground);
+  line-height: 1.7;
+}
+
+.ql-editor.ql-blank::before {
+  font-family: var(--font-body) !important;
+  font-style: normal;
+  opacity: 0.5;
+  left: 24px !important;
+}
+
+quill-editor {
+  display: block;
+  width: 100%;
 }
